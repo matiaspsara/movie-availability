@@ -125,7 +125,7 @@ export async function getStreamingAvailability(
   const freeProviders = data.results?.[region]?.free || [];
 
   const offers: StreamingOffer[] = [];
-  providers.forEach((provider: any) => {
+    providers.forEach((provider: { provider_id: string; provider_name: string; link: string }) => {
     offers.push({
       platform: provider.provider_id,
       platformName: provider.provider_name,
@@ -133,7 +133,7 @@ export async function getStreamingAvailability(
       url: provider.link,
     });
   });
-  rentProviders.forEach((provider: any) => {
+    rentProviders.forEach((provider: { provider_id: string; provider_name: string; link: string }) => {
     offers.push({
       platform: provider.provider_id,
       platformName: provider.provider_name,
@@ -141,7 +141,7 @@ export async function getStreamingAvailability(
       url: provider.link,
     });
   });
-  buyProviders.forEach((provider: any) => {
+    buyProviders.forEach((provider: { provider_id: string; provider_name: string; link: string }) => {
     offers.push({
       platform: provider.provider_id,
       platformName: provider.provider_name,
@@ -149,7 +149,7 @@ export async function getStreamingAvailability(
       url: provider.link,
     });
   });
-  freeProviders.forEach((provider: any) => {
+    freeProviders.forEach((provider: { provider_id: string; provider_name: string; link: string }) => {
     offers.push({
       platform: provider.provider_id,
       platformName: provider.provider_name,

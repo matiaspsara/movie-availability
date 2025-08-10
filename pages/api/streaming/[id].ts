@@ -37,10 +37,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const year = tmdbData.release_date?.slice(0, 4) || tmdbData.first_air_date?.slice(0, 4) || '2020';
     
     const streamingData = await getStreamingAvailability(
-      title,
-      year,
-      region,
-      type as 'movie' | 'tv'
+  id,
+  region,
+  type as 'movie' | 'tv'
     );
 
     res.status(200).json(streamingData);

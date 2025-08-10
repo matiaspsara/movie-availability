@@ -21,7 +21,7 @@ type RegionContextType = {
 const RegionContext = createContext<RegionContextType | undefined>(undefined);
 
 export function RegionProvider({ children }: { children: ReactNode }) {
-  const [selectedRegion, setSelectedRegion] = useState(regions[0]);
+  const [selectedRegion, setSelectedRegion] = useState(regions.find(r => r.code === 'AR') || regions[0]);
 
   return (
     <RegionContext.Provider value={{ selectedRegion, setSelectedRegion, regions }}>
