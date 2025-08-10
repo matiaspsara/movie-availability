@@ -1,6 +1,6 @@
 'use client';
 import { useSearchParams } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import AppLayout from '../../components/AppLayout';
 import Image from 'next/image';
 
@@ -18,7 +18,7 @@ type MovieDetails = {
   number_of_seasons?: number;
 };
 
-export default function ResultsPage() {
+function ResultsPageContent() {
   const searchParams = useSearchParams();
   const [movieDetails, setMovieDetails] = useState<MovieDetails | null>(null);
   const [loading, setLoading] = useState(true);
@@ -136,5 +136,19 @@ export default function ResultsPage() {
         </div>
       </div>
     </AppLayout>
+  );
+}
+
+export default function ResultsPage() {
+  return (
+    <Suspense fallback={
+      <AppLayout>
+        <div className="flex justify-center items-center min-h-64">
+          <div className="text-lg">Loading...</div>
+        </div>
+      </AppLayout>
+    }>
+      <ResultsPageContent />
+    </Suspense>
   );
 }
