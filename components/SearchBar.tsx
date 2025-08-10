@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useRegion } from './RegionContext';
 
 type SearchResult = {
@@ -16,21 +17,21 @@ export default function SearchBar() {
   const [results, setResults] = useState<SearchResult[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const { selectedRegion } = useRegion();
+  const router = useRouter();
 
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (query.trim()) {
-        // Mock API response for GitHub Pages deployment
-        const mockResults = [
-          { id: 1, title: 'Inception', year: '2010', type: 'movie', poster: 'https://image.tmdb.org/t/p/w92/qmDpIHrmpJINaRKAfWQfftjCdyi.jpg' },
-          { id: 2, title: 'The Matrix', year: '1999', type: 'movie', poster: 'https://image.tmdb.org/t/p/w92/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg' },
-          { id: 3, title: 'The Mandalorian', year: '2019', type: 'tv', poster: 'https://image.tmdb.org/t/p/w92/sWgBv7LV2PRoQgkxwlibdGXKq1q.jpg' },
-        ].filter(item => 
-          item.title.toLowerCase().includes(query.toLowerCase())
-        );
-        
-        setResults(mockResults);
-        setShowDropdown(true);
+        fetch(`/api/autocomplete?q=${encodeURIComponent(query)}&region=${selectedRegion.code}`)
+          .then(res => res.json())
+          .then(data => {
+            setResults(data);
+            setShowDropdown(true);
+          })
+          .catch(err => {
+            console.error('Autocomplete error', err);
+            setResults([]);
+          });
       } else {
         setShowDropdown(false);
       }
@@ -56,6 +57,7 @@ export default function SearchBar() {
               onClick={() => {
                 setQuery(r.title);
                 setShowDropdown(false);
+                router.push(`/results?id=${r.id}&type=${r.type}`);
               }}
             >
               {r.poster && (
