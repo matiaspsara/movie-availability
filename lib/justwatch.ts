@@ -182,8 +182,8 @@ export async function getStreamingAvailability(
     let hasBuy = false;
     let hasFree = false;
 
-    if (offersData.offers) {
-      offersData.offers.forEach((offer: any) => {
+         if (offersData.offers) {
+       offersData.offers.forEach((offer: { package_id: string; monetization_type: string; urls?: { standard_web?: string }; retail_price?: string; currency?: string }) => {
         const platformName = PLATFORM_NAMES[offer.package_id] || offer.package_id;
         
         const streamingOffer: StreamingOffer = {
@@ -224,12 +224,12 @@ export async function getStreamingAvailability(
   } catch (error) {
     console.error('Error fetching streaming availability:', error);
     
-    // Return mock data for now (we'll implement real API later)
-    return getMockStreamingData(title, region);
+         // Return mock data for now (we'll implement real API later)
+     return getMockStreamingData(title);
   }
 }
 
-function getMockStreamingData(title: string, region: string): StreamingAvailability {
+function getMockStreamingData(title: string): StreamingAvailability {
   const mockData: { [key: string]: StreamingOffer[] } = {
     'Inception': [
       { platform: 'nfx', platformName: 'Netflix', type: 'stream' },

@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { StreamingAvailability, StreamingOffer } from '../lib/justwatch';
+import { StreamingAvailability } from '../lib/justwatch';
 
 interface Props {
   movieId: string;
@@ -381,19 +381,7 @@ const platformColors: { [key: string]: string } = {
   'BBC English': 'bg-red-600',
 };
 
-const typeLabels = {
-  stream: 'Stream',
-  rent: 'Rent',
-  buy: 'Buy',
-  free: 'Free',
-};
 
-const typeColors = {
-  stream: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
-  rent: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
-  buy: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200',
-  free: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
-};
 
 export default function StreamingProviders({ movieId, title, type, region }: Props) {
   const [streamingData, setStreamingData] = useState<StreamingAvailability | null>(null);
