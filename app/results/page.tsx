@@ -2,6 +2,8 @@
 import { useSearchParams } from 'next/navigation';
 import { useState, useEffect, Suspense } from 'react';
 import AppLayout from '../../components/AppLayout';
+import StreamingProviders from '../../components/StreamingProviders';
+import { useRegion } from '../../components/RegionContext';
 import Image from 'next/image';
 
 type MovieDetails = {
@@ -20,6 +22,7 @@ type MovieDetails = {
 
 function ResultsPageContent() {
   const searchParams = useSearchParams();
+  const { selectedRegion } = useRegion();
   const [movieDetails, setMovieDetails] = useState<MovieDetails | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -111,26 +114,15 @@ function ResultsPageContent() {
                 {movieDetails.overview}
               </p>
               
-              {/* Streaming Providers Section */}
-              <div className="mt-8">
-                <h2 className="text-xl font-semibold mb-4">Where to Watch</h2>
-                <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                  <p className="text-gray-600 dark:text-gray-400">
-                    Streaming availability information will be displayed here once we integrate with streaming provider APIs.
-                  </p>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm">
-                      Netflix
-                    </span>
-                    <span className="px-3 py-1 bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200 rounded-full text-sm">
-                      Prime Video
-                    </span>
-                    <span className="px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full text-sm">
-                      Disney+
-                    </span>
-                  </div>
-                </div>
-              </div>
+                             {/* Streaming Providers Section */}
+               <div className="mt-8">
+                 <StreamingProviders
+                   movieId={movieId || ''}
+                   title={movieDetails.title || movieDetails.name || ''}
+                   type={type as 'movie' | 'tv'}
+                   region={selectedRegion.code}
+                 />
+               </div>
             </div>
           </div>
         </div>

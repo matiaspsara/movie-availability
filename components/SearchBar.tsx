@@ -54,11 +54,11 @@ export default function SearchBar() {
             <li
               key={`${r.type}-${r.id}`}
               className="px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer flex items-center gap-2"
-              onClick={() => {
-                setQuery(r.title);
-                setShowDropdown(false);
-                router.push(`/results?id=${r.id}&type=${r.type}`);
-              }}
+                                   onClick={() => {
+                       setQuery(r.title);
+                       setShowDropdown(false);
+                       router.push(`/results?id=${r.id}&type=${r.type}&region=${selectedRegion.code}`);
+                     }}
             >
               {r.poster && (
                 <Image src={r.poster} alt="" width={32} height={48} className="w-8 h-12 object-cover rounded" />
