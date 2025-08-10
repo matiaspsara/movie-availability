@@ -1,10 +1,19 @@
 'use client';
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { useRegion } from './RegionContext';
+
+type SearchResult = {
+  id: number;
+  title: string;
+  year: string;
+  type: string;
+  poster: string | null;
+};
 
 export default function SearchBar() {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<SearchResult[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const { selectedRegion } = useRegion();
 
@@ -50,7 +59,7 @@ export default function SearchBar() {
               }}
             >
               {r.poster && (
-                <img src={r.poster} alt="" className="w-8 h-12 object-cover rounded" />
+                <Image src={r.poster} alt="" width={32} height={48} className="w-8 h-12 object-cover rounded" />
               )}
               <span>{r.title}</span>
               <span className="text-sm text-gray-500 ml-auto">

@@ -22,7 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     ]);
 
     const results = [
-      ...movies.results.map((item: any) => ({
+      ...movies.results.map((item: { id: number; title: string; release_date?: string; poster_path?: string }) => ({
         id: item.id,
         title: item.title,
         year: item.release_date ? item.release_date.slice(0, 4) : '—',
@@ -31,7 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           ? `https://image.tmdb.org/t/p/w92${item.poster_path}`
           : null,
       })),
-      ...tv.results.map((item: any) => ({
+      ...tv.results.map((item: { id: number; name: string; first_air_date?: string; poster_path?: string }) => ({
         id: item.id,
         title: item.name,
         year: item.first_air_date ? item.first_air_date.slice(0, 4) : '—',
