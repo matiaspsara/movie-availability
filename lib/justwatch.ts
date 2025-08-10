@@ -1,24 +1,6 @@
 // lib/justwatch.ts
 
-const JUSTWATCH_API_BASE = 'https://apis.justwatch.com/content';
-
-// JustWatch country codes mapping
-const COUNTRY_CODES: { [key: string]: string } = {
-  'US': 'en_US',
-  'AR': 'es_AR', 
-  'UK': 'en_GB',
-  'CA': 'en_CA',
-  'AU': 'en_AU',
-  'DE': 'de_DE',
-  'FR': 'fr_FR',
-  'ES': 'es_ES',
-  'IT': 'it_IT',
-  'BR': 'pt_BR',
-  'MX': 'es_MX',
-  'JP': 'ja_JP',
-  'KR': 'ko_KR',
-  'IN': 'en_IN',
-};
+// ...existing code...
 
 // Streaming platform mapping
 const PLATFORM_NAMES: { [key: string]: string } = {
@@ -119,152 +101,68 @@ export interface StreamingAvailability {
 }
 
 export async function getStreamingAvailability(
-  title: string,
-  year: string,
+  id: string,
   region: string,
   contentType: 'movie' | 'tv'
 ): Promise<StreamingAvailability> {
-  try {
-    const countryCode = COUNTRY_CODES[region] || COUNTRY_CODES['US'];
-    
-    // Search for the content on JustWatch
-    const searchResponse = await fetch(`${JUSTWATCH_API_BASE}/titles/${countryCode}/popular`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        query: title,
-        content_types: [contentType === 'movie' ? 'movie' : 'show'],
-        release_year_from: parseInt(year) - 1,
-        release_year_until: parseInt(year) + 1,
-        page: 1,
-        page_size: 10,
-      }),
-    });
-
-    if (!searchResponse.ok) {
-      throw new Error('Failed to search JustWatch');
-    }
-
-    const searchData = await searchResponse.json();
-    
-    if (!searchData.items || searchData.items.length === 0) {
-      return {
-        offers: [],
-        hasStreaming: false,
-        hasRent: false,
-        hasBuy: false,
-        hasFree: false,
-      };
-    }
-
-    // Get the first result (most relevant)
-    const contentId = searchData.items[0].jw_entity_id;
-    
-    // Get detailed offers for this content
-    const offersResponse = await fetch(`${JUSTWATCH_API_BASE}/titles/${contentType}/${contentId}/locale/${countryCode}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!offersResponse.ok) {
-      throw new Error('Failed to fetch offers');
-    }
-
-    const offersData = await offersResponse.json();
-    
-    const offers: StreamingOffer[] = [];
-    let hasStreaming = false;
-    let hasRent = false;
-    let hasBuy = false;
-    let hasFree = false;
-
-         if (offersData.offers) {
-       offersData.offers.forEach((offer: { package_id: string; monetization_type: string; urls?: { standard_web?: string }; retail_price?: string; currency?: string }) => {
-        const platformName = PLATFORM_NAMES[offer.package_id] || offer.package_id;
-        
-                 const streamingOffer: StreamingOffer = {
-           platform: offer.package_id,
-           platformName,
-           type: offer.monetization_type as 'buy' | 'rent' | 'stream' | 'free',
-           url: offer.urls?.standard_web,
-           price: offer.retail_price,
-           currency: offer.currency,
-         };
-
-        offers.push(streamingOffer);
-
-        switch (offer.monetization_type) {
-          case 'stream':
-            hasStreaming = true;
-            break;
-          case 'rent':
-            hasRent = true;
-            break;
-          case 'buy':
-            hasBuy = true;
-            break;
-          case 'free':
-            hasFree = true;
-            break;
-        }
-      });
-    }
-
+  const API_KEY = process.env.TMDB_API_KEY;
+  const BASE_URL = 'https://api.themoviedb.org/3';
+  const url = `${BASE_URL}/${contentType}/${id}/watch/providers?api_key=${API_KEY}`;
+  const res = await fetch(url);
+  if (!res.ok) {
     return {
-      offers,
-      hasStreaming,
-      hasRent,
-      hasBuy,
-      hasFree,
+      offers: [],
+      hasStreaming: false,
+      hasRent: false,
+      hasBuy: false,
+      hasFree: false,
     };
-  } catch (error) {
-    console.error('Error fetching streaming availability:', error);
-    
-         // Return mock data for now (we'll implement real API later)
-     return getMockStreamingData(title);
   }
-}
+  const data = await res.json();
+  const providers = data.results?.[region]?.flatrate || [];
+  const rentProviders = data.results?.[region]?.rent || [];
+  const buyProviders = data.results?.[region]?.buy || [];
+  const freeProviders = data.results?.[region]?.free || [];
 
-function getMockStreamingData(title: string): StreamingAvailability {
-  const mockData: { [key: string]: StreamingOffer[] } = {
-    'Inception': [
-      { platform: 'nfx', platformName: 'Netflix', type: 'stream' },
-      { platform: 'prv', platformName: 'Prime Video', type: 'stream' },
-      { platform: 'itu', platformName: 'iTunes', type: 'rent', price: '$3.99' },
-      { platform: 'ply', platformName: 'Google Play', type: 'buy', price: '$14.99' },
-    ],
-    'The Matrix': [
-      { platform: 'hbo', platformName: 'HBO Max', type: 'stream' },
-      { platform: 'itu', platformName: 'iTunes', type: 'rent', price: '$3.99' },
-      { platform: 'vdu', platformName: 'Vudu', type: 'buy', price: '$12.99' },
-    ],
-    'Breaking Bad': [
-      { platform: 'nfx', platformName: 'Netflix', type: 'stream' },
-      { platform: 'amz', platformName: 'Amazon Prime', type: 'stream' },
-    ],
-    'Stranger Things': [
-      { platform: 'nfx', platformName: 'Netflix', type: 'stream' },
-    ],
-    'Avengers': [
-      { platform: 'dsn', platformName: 'Disney+', type: 'stream' },
-      { platform: 'itu', platformName: 'iTunes', type: 'rent', price: '$4.99' },
-    ],
-  };
-
-  const offers = mockData[title] || [
-    { platform: 'nfx', platformName: 'Netflix', type: 'stream' },
-    { platform: 'prv', platformName: 'Prime Video', type: 'stream' },
-  ];
+  const offers: StreamingOffer[] = [];
+  providers.forEach((provider: any) => {
+    offers.push({
+      platform: provider.provider_id,
+      platformName: provider.provider_name,
+      type: 'stream',
+      url: provider.link,
+    });
+  });
+  rentProviders.forEach((provider: any) => {
+    offers.push({
+      platform: provider.provider_id,
+      platformName: provider.provider_name,
+      type: 'rent',
+      url: provider.link,
+    });
+  });
+  buyProviders.forEach((provider: any) => {
+    offers.push({
+      platform: provider.provider_id,
+      platformName: provider.provider_name,
+      type: 'buy',
+      url: provider.link,
+    });
+  });
+  freeProviders.forEach((provider: any) => {
+    offers.push({
+      platform: provider.provider_id,
+      platformName: provider.provider_name,
+      type: 'free',
+      url: provider.link,
+    });
+  });
 
   return {
     offers,
-    hasStreaming: offers.some(o => o.type === 'stream'),
-    hasRent: offers.some(o => o.type === 'rent'),
-    hasBuy: offers.some(o => o.type === 'buy'),
-    hasFree: offers.some(o => o.type === 'free'),
+    hasStreaming: providers.length > 0,
+    hasRent: rentProviders.length > 0,
+    hasBuy: buyProviders.length > 0,
+    hasFree: freeProviders.length > 0,
   };
 }
