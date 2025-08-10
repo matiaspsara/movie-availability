@@ -24,8 +24,8 @@ export default function ResultsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const movieId = searchParams.get('id');
-  const type = searchParams.get('type') || 'movie';
+  const movieId = searchParams?.get('id');
+  const type = searchParams?.get('type') || 'movie';
 
   useEffect(() => {
     if (!movieId) {
