@@ -1,0 +1,11 @@
+{
+  "appName": "Dónde ver",
+  "searchPlaceholder": "Buscar una película o serie...",
+  "regionLabel": "Región",
+  "languageLabel": "Idioma",
+  "providersLabel": "Disponible en",
+  "noResults": "No se encontraron resultados.",
+  "selectLanguage": "Seleccionar idioma",
+  "english": "Inglés",
+  "spanish": "Español"
+}

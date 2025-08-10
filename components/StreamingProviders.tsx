@@ -1,4 +1,5 @@
 'use client';
+import { useTranslations } from "../lib/useTranslations";
 import { useState, useEffect } from 'react';
 import { StreamingAvailability } from '../lib/justwatch';
 
@@ -10,90 +11,47 @@ interface Props {
 }
 
 const platformColors: { [key: string]: string } = {
-  'Netflix': 'bg-red-600',
-  'Prime Video': 'bg-blue-600',
-  'Hulu': 'bg-green-600',
-  'HBO Max': 'bg-purple-600',
-  'Disney+': 'bg-blue-500',
-  'Apple TV+': 'bg-gray-800',
-  'Paramount+': 'bg-blue-700',
-  'Peacock': 'bg-blue-400',
-  'Crunchyroll': 'bg-orange-500',
-  'Funimation': 'bg-purple-500',
-  'Showtime': 'bg-red-700',
-  'Starz': 'bg-purple-700',
-  'Amazon Prime': 'bg-blue-600',
-  'iTunes': 'bg-gray-700',
-  'Google Play': 'bg-green-500',
-  'Vudu': 'bg-blue-500',
-  'Microsoft Store': 'bg-green-600',
-  'YouTube': 'bg-red-500',
-  'HIDIVE': 'bg-purple-600',
-  'VRV': 'bg-orange-600',
-  'BTS': 'bg-purple-500',
-  'MUBI': 'bg-red-600',
-  'Shudder': 'bg-red-800',
-  'Acorn TV': 'bg-green-700',
-  'BritBox': 'bg-blue-800',
-  'Discovery+': 'bg-yellow-600',
-  'Philharmonic': 'bg-purple-800',
-  'Criterion Channel': 'bg-gray-600',
-  'IndieFlix': 'bg-purple-500',
-  'Tubi': 'bg-blue-500',
-  'Pluto TV': 'bg-purple-600',
-  'Roku Channel': 'bg-purple-700',
-  'Xumo': 'bg-blue-600',
-  'CW Seed': 'bg-purple-500',
-  'CW TV': 'bg-purple-600',
-  'ABC': 'bg-blue-600',
-  'NBC': 'bg-blue-700',
-  'CBS': 'bg-blue-800',
-  'FOX': 'bg-red-600',
-  'PBS': 'bg-blue-600',
-  'TBS': 'bg-orange-500',
-  'TNT': 'bg-blue-600',
-  'USA Network': 'bg-blue-700',
-  'Syfy': 'bg-blue-600',
-  'AMC': 'bg-red-600',
-  'FX': 'bg-purple-600',
-  'FXX': 'bg-purple-700',
-  'FXM': 'bg-purple-800',
-  'TLC': 'bg-pink-500',
-  'HGTV': 'bg-green-600',
-  'Food Network': 'bg-orange-500',
-  'Travel Channel': 'bg-blue-500',
-  'History': 'bg-gray-600',
-  'A&E': 'bg-red-600',
-  'Lifetime': 'bg-pink-500',
-  'HLN': 'bg-red-600',
-  'CNN': 'bg-red-600',
-  'MSNBC': 'bg-blue-600',
-  'Fox News': 'bg-red-600',
-  'CNBC': 'bg-blue-600',
-  'Bloomberg': 'bg-orange-500',
-  'ESPN': 'bg-red-600',
-  'ESPN2': 'bg-red-700',
-  'ESPN+': 'bg-red-800',
-  'FS1': 'bg-blue-600',
-  'FS2': 'bg-blue-700',
-  'NBC Sports': 'bg-blue-600',
-  'CBS Sports': 'bg-blue-600',
-  'Golf Channel': 'bg-green-600',
-  'Tennis Channel': 'bg-green-500',
-  'NHL Network': 'bg-gray-600',
-  'MLB Network': 'bg-blue-600',
-  'NBA TV': 'bg-blue-600',
-  'NFL Network': 'bg-red-600',
-  'NFL RedZone': 'bg-red-700',
-  'NCAA Network': 'bg-blue-600',
-  'SEC Network': 'bg-blue-600',
-  'Big Ten Network': 'bg-blue-600',
-  'Pac-12 Network': 'bg-blue-600',
-  'ACC Network': 'bg-blue-600',
-  'Longhorn Network': 'bg-orange-600',
+  'Netflix': 'from-red-600 to-red-700',
+  'Prime Video': 'from-blue-600 to-blue-700',
+  'Amazon Prime': 'from-blue-600 to-blue-700',
+  'Hulu': 'from-green-500 to-green-600',
+  'HBO Max': 'from-purple-600 to-purple-700',
+  'Disney+': 'from-blue-500 to-blue-600',
+  'Apple TV+': 'from-gray-700 to-gray-800',
+  'Paramount+': 'from-blue-700 to-blue-800',
+  'Peacock': 'from-blue-400 to-blue-500',
+  'Crunchyroll': 'from-orange-500 to-orange-600',
+  'YouTube': 'from-red-500 to-red-600',
+  'iTunes': 'from-gray-600 to-gray-700',
+  'Google Play': 'from-green-500 to-green-600',
+  'Vudu': 'from-blue-500 to-blue-600',
+  'MUBI': 'from-red-600 to-red-700',
+  'Tubi': 'from-blue-500 to-blue-600',
+  'Pluto TV': 'from-purple-600 to-purple-700',
+};
+
+const platformIcons: { [key: string]: string } = {
+  'Netflix': '🎬',
+  'Prime Video': '📺',
+  'Amazon Prime': '📺',
+  'Hulu': '🟢',
+  'HBO Max': '🎭',
+  'Disney+': '🏰',
+  'Apple TV+': '🍎',
+  'Paramount+': '⭐',
+  'Peacock': '🦚',
+  'Crunchyroll': '📺',
+  'YouTube': '▶️',
+  'iTunes': '🎵',
+  'Google Play': '▶️',
+  'Vudu': '📽️',
+  'MUBI': '🎨',
+  'Tubi': '📺',
+  'Pluto TV': '🪐',
 };
 
 export default function StreamingProviders({ movieId, title, type, region }: Props) {
+  const t = useTranslations();
   const [streamingData, setStreamingData] = useState<StreamingAvailability | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -123,13 +81,16 @@ export default function StreamingProviders({ movieId, title, type, region }: Pro
 
   if (loading) {
     return (
-      <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
-        <div className="animate-pulse">
-          <div className="h-6 bg-gray-200 dark:bg-gray-600 rounded w-1/3 mb-4"></div>
-          <div className="space-y-3">
-            <div className="h-4 bg-gray-200 dark:bg-gray-600 rounded w-1/2"></div>
-            <div className="h-4 bg-gray-200 dark:bg-gray-600 rounded w-2/3"></div>
-            <div className="h-4 bg-gray-200 dark:bg-gray-600 rounded w-1/3"></div>
+      <div className="bg-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-8">
+        <div className="animate-pulse space-y-6">
+          <div className="h-8 bg-gradient-to-r from-white/20 to-white/10 rounded-lg w-1/3"></div>
+          <div className="space-y-4">
+            <div className="h-6 bg-gradient-to-r from-white/15 to-white/5 rounded w-1/2"></div>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="h-20 bg-gradient-to-r from-white/10 to-white/5 rounded-xl"></div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -138,10 +99,20 @@ export default function StreamingProviders({ movieId, title, type, region }: Pro
 
   if (error || !streamingData) {
     return (
-      <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
-        <p className="text-gray-600 dark:text-gray-400">
-          Unable to load streaming availability at this time.
-        </p>
+      <div className="bg-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-8">
+        <div className="text-center">
+          <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-red-400">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="15" y1="9" x2="9" y2="15"/>
+              <line x1="9" y1="9" x2="15" y2="15"/>
+            </svg>
+          </div>
+          <h3 className="text-lg font-semibold text-white mb-2">Unable to Load</h3>
+          <p className="text-white/60">
+            Unable to load streaming availability at this time.
+          </p>
+        </div>
       </div>
     );
   }
@@ -150,11 +121,20 @@ export default function StreamingProviders({ movieId, title, type, region }: Pro
 
   if (offers.length === 0) {
     return (
-      <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
-        <h3 className="text-lg font-semibold mb-2">Where to Watch</h3>
-        <p className="text-gray-600 dark:text-gray-400">
-          No streaming information available for {title} in {region}.
-        </p>
+      <div className="bg-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-8">
+        <div className="text-center">
+          <div className="w-16 h-16 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-yellow-400">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+          </div>
+          <h3 className="text-lg font-semibold text-white mb-2">Not Available</h3>
+          <p className="text-white/60">
+            No streaming information available for <span className="text-white font-medium">{title}</span> in {region}.
+          </p>
+        </div>
       </div>
     );
   }
@@ -165,27 +145,59 @@ export default function StreamingProviders({ movieId, title, type, region }: Pro
   const buyOffers = offers.filter(o => o.type === 'buy');
   const freeOffers = offers.filter(o => o.type === 'free');
 
+  const PlatformCard = ({ offer, index, showPrice = false }: { offer: any, index: number, showPrice?: boolean }) => (
+    <div
+      key={`${offer.platform}-${index}`}
+      className="group cursor-pointer"
+      onClick={() => offer.url && window.open(offer.url, '_blank')}
+    >
+      <div className={`bg-gradient-to-br ${platformColors[offer.platformName] || 'from-gray-600 to-gray-700'} rounded-xl p-4 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 hover:-translate-y-1`}>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="text-2xl">{platformIcons[offer.platformName] || '📺'}</div>
+            <div>
+              <div className="font-bold text-white text-sm">{offer.platformName}</div>
+              <div className="text-white/80 text-xs">
+                {showPrice ? (offer.price || 'Check Price') : 'Included'}
+              </div>
+            </div>
+          </div>
+          <div className="text-white/60 group-hover:text-white transition-colors">
+            <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M7 17L17 7M17 7H7M17 7V17"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
-    <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
-      <h3 className="text-xl font-semibold mb-4">Where to Watch</h3>
+    <div className="bg-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-8">
+      <div className="flex items-center gap-3 mb-8">
+        <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+          <svg width="20" height="20" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polygon points="23 7 16 12 23 17 23 7"/>
+            <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+          </svg>
+        </div>
+  {/* Use translation for app name */}
+  <h3 className="text-2xl font-bold text-white">{t("appName")}</h3>
+      </div>
       
       {/* Streaming Services */}
       {streamingOffers.length > 0 && (
-        <div className="mb-6">
-          <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center">
-            <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
-            Streaming Services
-          </h4>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+        <div className="mb-8">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+            <h4 className="text-lg font-semibold text-white">Streaming Services</h4>
+            <div className="px-3 py-1 bg-green-500/20 rounded-full text-green-400 text-xs font-medium">
+              {streamingOffers.length} available
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {streamingOffers.map((offer, index) => (
-              <div
-                key={`${offer.platform}-${index}`}
-                className={`${platformColors[offer.platformName] || 'bg-gray-600'} rounded-lg p-3 text-white text-center hover:opacity-90 transition-opacity cursor-pointer`}
-                onClick={() => offer.url && window.open(offer.url, '_blank')}
-              >
-                <div className="font-semibold text-sm">{offer.platformName}</div>
-                <div className="text-xs opacity-90">Included</div>
-              </div>
+              <PlatformCard key={`stream-${index}`} offer={offer} index={index} />
             ))}
           </div>
         </div>
@@ -193,23 +205,17 @@ export default function StreamingProviders({ movieId, title, type, region }: Pro
 
       {/* Rent Options */}
       {rentOffers.length > 0 && (
-        <div className="mb-6">
-          <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center">
-            <span className="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
-            Rent
-          </h4>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+        <div className="mb-8">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-3 h-3 bg-blue-400 rounded-full animate-pulse"></div>
+            <h4 className="text-lg font-semibold text-white">Rent</h4>
+            <div className="px-3 py-1 bg-blue-500/20 rounded-full text-blue-400 text-xs font-medium">
+              {rentOffers.length} available
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {rentOffers.map((offer, index) => (
-              <div
-                key={`${offer.platform}-${index}`}
-                className="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-600 hover:shadow-md transition-shadow cursor-pointer"
-                onClick={() => offer.url && window.open(offer.url, '_blank')}
-              >
-                <div className="font-semibold text-sm text-gray-900 dark:text-white">{offer.platformName}</div>
-                <div className="text-sm text-green-600 dark:text-green-400 font-medium">
-                  {offer.price || 'Check Price'}
-                </div>
-              </div>
+              <PlatformCard key={`rent-${index}`} offer={offer} index={index} showPrice />
             ))}
           </div>
         </div>
@@ -217,23 +223,17 @@ export default function StreamingProviders({ movieId, title, type, region }: Pro
 
       {/* Buy Options */}
       {buyOffers.length > 0 && (
-        <div className="mb-6">
-          <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center">
-            <span className="w-2 h-2 bg-purple-500 rounded-full mr-2"></span>
-            Buy
-          </h4>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+        <div className="mb-8">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-3 h-3 bg-purple-400 rounded-full animate-pulse"></div>
+            <h4 className="text-lg font-semibold text-white">Buy</h4>
+            <div className="px-3 py-1 bg-purple-500/20 rounded-full text-purple-400 text-xs font-medium">
+              {buyOffers.length} available
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {buyOffers.map((offer, index) => (
-              <div
-                key={`${offer.platform}-${index}`}
-                className="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-600 hover:shadow-md transition-shadow cursor-pointer"
-                onClick={() => offer.url && window.open(offer.url, '_blank')}
-              >
-                <div className="font-semibold text-sm text-gray-900 dark:text-white">{offer.platformName}</div>
-                <div className="text-sm text-green-600 dark:text-green-400 font-medium">
-                  {offer.price || 'Check Price'}
-                </div>
-              </div>
+              <PlatformCard key={`buy-${index}`} offer={offer} index={index} showPrice />
             ))}
           </div>
         </div>
@@ -241,33 +241,49 @@ export default function StreamingProviders({ movieId, title, type, region }: Pro
 
       {/* Free Options */}
       {freeOffers.length > 0 && (
-        <div className="mb-6">
-          <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center">
-            <span className="w-2 h-2 bg-yellow-500 rounded-full mr-2"></span>
-            Free
-          </h4>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+        <div className="mb-8">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-3 h-3 bg-yellow-400 rounded-full animate-pulse"></div>
+            <h4 className="text-lg font-semibold text-white">Free</h4>
+            <div className="px-3 py-1 bg-yellow-500/20 rounded-full text-yellow-400 text-xs font-medium">
+              {freeOffers.length} available
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {freeOffers.map((offer, index) => (
-              <div
-                key={`${offer.platform}-${index}`}
-                className="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-600 hover:shadow-md transition-shadow cursor-pointer"
-                onClick={() => offer.url && window.open(offer.url, '_blank')}
-              >
-                <div className="font-semibold text-sm text-gray-900 dark:text-white">{offer.platformName}</div>
-                <div className="text-sm text-green-600 dark:text-green-400 font-medium">Free</div>
-              </div>
+              <PlatformCard key={`free-${index}`} offer={offer} index={index} />
             ))}
           </div>
         </div>
       )}
 
       {/* Summary */}
-      <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-600">
-        <div className="flex flex-wrap gap-2 text-sm text-gray-600 dark:text-gray-400">
-          {hasStreaming && <span className="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-2 py-1 rounded">Streaming Available</span>}
-          {hasRent && <span className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded">Rent Available</span>}
-          {hasBuy && <span className="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 px-2 py-1 rounded">Buy Available</span>}
-          {hasFree && <span className="bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 px-2 py-1 rounded">Free Available</span>}
+      <div className="pt-6 border-t border-white/10">
+        <div className="flex flex-wrap gap-3">
+          {hasStreaming && (
+            <div className="flex items-center gap-2 bg-green-500/20 text-green-400 px-4 py-2 rounded-lg border border-green-500/30">
+              <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+              <span className="text-sm font-medium">Streaming Available</span>
+            </div>
+          )}
+          {hasRent && (
+            <div className="flex items-center gap-2 bg-blue-500/20 text-blue-400 px-4 py-2 rounded-lg border border-blue-500/30">
+              <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+              <span className="text-sm font-medium">Rent Available</span>
+            </div>
+          )}
+          {hasBuy && (
+            <div className="flex items-center gap-2 bg-purple-500/20 text-purple-400 px-4 py-2 rounded-lg border border-purple-500/30">
+              <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
+              <span className="text-sm font-medium">Buy Available</span>
+            </div>
+          )}
+          {hasFree && (
+            <div className="flex items-center gap-2 bg-yellow-500/20 text-yellow-400 px-4 py-2 rounded-lg border border-yellow-500/30">
+              <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
+              <span className="text-sm font-medium">Free Available</span>
+            </div>
+          )}
         </div>
       </div>
     </div>

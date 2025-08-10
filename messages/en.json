@@ -1,0 +1,11 @@
+{
+  "appName": "Where to Watch",
+  "searchPlaceholder": "Search for a movie or show...",
+  "regionLabel": "Region",
+  "languageLabel": "Language",
+  "providersLabel": "Available on",
+  "noResults": "No results found.",
+  "selectLanguage": "Select Language",
+  "english": "English",
+  "spanish": "Spanish"
+}
