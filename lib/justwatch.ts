@@ -186,14 +186,14 @@ export async function getStreamingAvailability(
        offersData.offers.forEach((offer: { package_id: string; monetization_type: string; urls?: { standard_web?: string }; retail_price?: string; currency?: string }) => {
         const platformName = PLATFORM_NAMES[offer.package_id] || offer.package_id;
         
-        const streamingOffer: StreamingOffer = {
-          platform: offer.package_id,
-          platformName,
-          type: offer.monetization_type,
-          url: offer.urls?.standard_web,
-          price: offer.retail_price,
-          currency: offer.currency,
-        };
+                 const streamingOffer: StreamingOffer = {
+           platform: offer.package_id,
+           platformName,
+           type: offer.monetization_type as 'buy' | 'rent' | 'stream' | 'free',
+           url: offer.urls?.standard_web,
+           price: offer.retail_price,
+           currency: offer.currency,
+         };
 
         offers.push(streamingOffer);
 
