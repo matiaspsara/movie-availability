@@ -11,16 +11,17 @@ export default function SearchBar() {
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (query.trim()) {
-        fetch(`/api/autocomplete?q=${encodeURIComponent(query)}&region=${selectedRegion.code}`)
-          .then(res => res.json())
-          .then(data => {
-            setResults(data);
-            setShowDropdown(true);
-          })
-          .catch(err => {
-            console.error('Autocomplete error', err);
-            setResults([]);
-          });
+        // Mock API response for GitHub Pages deployment
+        const mockResults = [
+          { id: 1, title: 'Inception', year: '2010', type: 'movie', poster: 'https://image.tmdb.org/t/p/w92/qmDpIHrmpJINaRKAfWQfftjCdyi.jpg' },
+          { id: 2, title: 'The Matrix', year: '1999', type: 'movie', poster: 'https://image.tmdb.org/t/p/w92/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg' },
+          { id: 3, title: 'The Mandalorian', year: '2019', type: 'tv', poster: 'https://image.tmdb.org/t/p/w92/sWgBv7LV2PRoQgkxwlibdGXKq1q.jpg' },
+        ].filter(item => 
+          item.title.toLowerCase().includes(query.toLowerCase())
+        );
+        
+        setResults(mockResults);
+        setShowDropdown(true);
       } else {
         setShowDropdown(false);
       }
