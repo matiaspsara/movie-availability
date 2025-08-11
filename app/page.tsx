@@ -102,22 +102,7 @@ function SearchBar() {
             value={query}
             onChange={e => setQuery(e.target.value)}
           />
-          <div className="absolute right-4 top-1/2 -translate-y-1/2">
-            <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center cursor-pointer hover:from-blue-400 hover:to-purple-500 transition-all duration-300 shadow-lg"
-              onClick={() => {
-                if (results.length > 0) {
-                  handleResultClick(results[0]);
-                } else if (query.trim()) {
-                  router.push(`/results?title=${encodeURIComponent(query)}&region=${selectedRegion.code}`);
-                }
-              }}
-            >
-              <svg width="20" height="20" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="11" cy="11" r="8"/>
-                <path d="m21 21-4.35-4.35"/>
-              </svg>
-            </div>
-          </div>
+          {/* Search button removed as requested */}
         </div>
       </div>
 

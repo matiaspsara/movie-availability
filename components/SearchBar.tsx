@@ -92,16 +92,7 @@ export default function SearchBar() {
               value={query}
               onChange={e => setQuery(e.target.value)}
             />
-            <button
-              type="submit"
-              className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center cursor-pointer hover:from-blue-400 hover:to-purple-500 transition-all duration-300 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={!query.trim() || isLoading}
-            >
-              <svg width="20" height="20" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="11" cy="11" r="8" />
-                <path d="m21 21-4.35-4.35" />
-              </svg>
-            </button>
+            {/* Search button removed as requested */}
           </div>
         </div>
       </form>
