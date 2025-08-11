@@ -8,7 +8,7 @@ type SearchResult = {
   poster?: string;
   poster_path?: string;
 };
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
@@ -26,6 +26,9 @@ function SearchBar() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedRegion] = useState(regions[1]); // AR default
   const router = useRouter();
+
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const touchStartRef = useRef<number | null>(null);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -50,9 +53,39 @@ function SearchBar() {
     router.push(`/results?id=${result.id}&type=${result.type}&region=${selectedRegion.code}`);
   };
 
+  // Prevent wheel events from propagating to the page when the dropdown is at its scroll edges
+  const onDropdownWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    const el = e.currentTarget;
+    const delta = e.deltaY;
+    const atTop = el.scrollTop === 0;
+    const atBottom = Math.ceil(el.scrollTop + el.clientHeight) >= el.scrollHeight;
+    // if scrolling up while already at top OR scrolling down while already at bottom -> prevent page scroll
+    if ((delta < 0 && atTop) || (delta > 0 && atBottom)) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  };
+
+  const onTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    touchStartRef.current = e.touches[0]?.clientY ?? null;
+  };
+
+  const onTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    const el = e.currentTarget;
+    if (touchStartRef.current == null) return;
+    const currentY = e.touches[0]?.clientY ?? 0;
+    const delta = touchStartRef.current - currentY; // positive when swiping up
+    const atTop = el.scrollTop === 0;
+    const atBottom = Math.ceil(el.scrollTop + el.clientHeight) >= el.scrollHeight;
+    if ((delta < 0 && atTop) || (delta > 0 && atBottom)) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  };
+
   return (
     <div className="relative w-full">
-      {/* Search Input */}
+      {/* Search input area (unchanged) */}
       <div className="relative group">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-300"></div>
         <div className="relative bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl overflow-hidden shadow-2xl">
@@ -88,9 +121,17 @@ function SearchBar() {
         </div>
       </div>
 
-      {/* Search Results Dropdown */}
+      {/* Updated Search Results Dropdown */}
       {showDropdown && results.length > 0 && (
-        <div className="absolute z-50 w-full mt-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl overflow-hidden">
+        <div
+          ref={dropdownRef}
+          className="absolute z-50 w-full mt-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl
+                     max-h-[60vh] overflow-y-auto overscroll-contain scrollbar-thin scrollbar-track-white/10 scrollbar-thumb-white/30"
+          onWheel={onDropdownWheel}
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          style={{ WebkitOverflowScrolling: 'touch' }}
+        >
           {results.map(result => (
             <div
               key={`${result.type}-${result.id}`}
@@ -127,6 +168,7 @@ function SearchBar() {
     </div>
   );
 }
+
 
 // Modern Region Selector
 function RegionSelector() {

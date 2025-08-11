@@ -40,7 +40,7 @@ export default function SearchBar() {
         setIsLoading(false);
       }
     }, 300);
-    
+
     return () => clearTimeout(timeout);
   }, [query, selectedRegion.code]);
 
@@ -68,20 +68,20 @@ export default function SearchBar() {
               {isLoading ? (
                 <div className="animate-spin">
                   <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="12" y1="2" x2="12" y2="6"/>
-                    <line x1="12" y1="18" x2="12" y2="22"/>
-                    <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/>
-                    <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/>
-                    <line x1="2" y1="12" x2="6" y2="12"/>
-                    <line x1="18" y1="12" x2="22" y2="12"/>
-                    <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/>
-                    <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/>
+                    <line x1="12" y1="2" x2="12" y2="6" />
+                    <line x1="12" y1="18" x2="12" y2="22" />
+                    <line x1="4.93" y1="4.93" x2="7.76" y2="7.76" />
+                    <line x1="16.24" y1="16.24" x2="19.07" y2="19.07" />
+                    <line x1="2" y1="12" x2="6" y2="12" />
+                    <line x1="18" y1="12" x2="22" y2="12" />
+                    <line x1="4.93" y1="19.07" x2="7.76" y2="16.24" />
+                    <line x1="16.24" y1="7.76" x2="19.07" y2="4.93" />
                   </svg>
                 </div>
               ) : (
                 <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="11" cy="11" r="8"/>
-                  <path d="m21 21-4.35-4.35"/>
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="m21 21-4.35-4.35" />
                 </svg>
               )}
             </div>
@@ -98,8 +98,8 @@ export default function SearchBar() {
               disabled={!query.trim() || isLoading}
             >
               <svg width="20" height="20" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="11" cy="11" r="8"/>
-                <path d="m21 21-4.35-4.35"/>
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.35-4.35" />
               </svg>
             </button>
           </div>
@@ -108,7 +108,11 @@ export default function SearchBar() {
 
       {/* Search Results Dropdown */}
       {showDropdown && results.length > 0 && (
-        <div className="absolute z-50 w-full mt-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl overflow-hidden max-h-80 overflow-y-auto scrollbar-thin scrollbar-track-white/10 scrollbar-thumb-white/30">
+        <div
+          className="absolute z-50 w-full mt-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl 
+               max-h-80 overflow-y-auto scrollbar-thin scrollbar-track-white/10 scrollbar-thumb-white/30"
+          style={{ overscrollBehavior: 'contain' }} // prevent page scroll
+        >
           {results.map(result => (
             <div
               key={`${result.type}-${result.id}`}
@@ -117,8 +121,8 @@ export default function SearchBar() {
             >
               <div className="w-12 h-16 rounded-lg overflow-hidden shadow-lg flex-shrink-0 bg-gray-700">
                 {result.poster ? (
-                  <Image 
-                    src={result.poster} 
+                  <Image
+                    src={result.poster}
                     alt={result.title}
                     width={48}
                     height={64}
@@ -127,9 +131,9 @@ export default function SearchBar() {
                 ) : (
                   <div className="w-full h-full bg-gradient-to-br from-gray-600 to-gray-800 flex items-center justify-center">
                     <svg width="20" height="20" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                      <circle cx="8.5" cy="8.5" r="1.5"/>
-                      <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                      <circle cx="8.5" cy="8.5" r="1.5" />
+                      <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
                     </svg>
                   </div>
                 )}
@@ -145,7 +149,7 @@ export default function SearchBar() {
               </div>
               <div className="text-white/40 flex-shrink-0">
                 <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-                  <path d="m9 18 6-6-6-6"/>
+                  <path d="m9 18 6-6-6-6" />
                 </svg>
               </div>
             </div>
@@ -153,14 +157,15 @@ export default function SearchBar() {
         </div>
       )}
 
+
       {/* Empty State */}
       {showDropdown && results.length === 0 && !isLoading && query.trim() && (
         <div className="absolute z-50 w-full mt-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl overflow-hidden">
           <div className="px-6 py-8 text-center">
             <div className="text-white/60 mb-2">
               <svg width="48" height="48" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mx-auto mb-4">
-                <circle cx="11" cy="11" r="8"/>
-                <path d="m21 21-4.35-4.35"/>
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.35-4.35" />
               </svg>
             </div>
             <h4 className="text-white font-medium mb-2">No results found</h4>
