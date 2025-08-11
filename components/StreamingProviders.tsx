@@ -50,11 +50,198 @@ const platformIcons: { [key: string]: string } = {
   'Pluto TV': '🪐',
 };
 
+// Platform detection utilities
+const isMobile = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+};
+
+const isIOS = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  return /iPad|iPhone|iPod/.test(navigator.userAgent);
+};
+
+const isAndroid = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  return /Android/.test(navigator.userAgent);
+};
+
+// Get streaming service URLs for different platforms
+const getStreamingUrls = (platformName: string, contentUrl?: string) => {
+  const fallbackWeb = contentUrl || '#';
+  
+  switch (platformName.toLowerCase()) {
+    case 'netflix':
+      return {
+        web: contentUrl || 'https://www.netflix.com',
+        ios: 'nflx://',
+        android: contentUrl || 'https://www.netflix.com'
+      };
+    
+    case 'prime video':
+    case 'amazon prime':
+      return {
+        web: contentUrl || 'https://www.amazon.com/Prime-Video',
+        ios: 'aiv://',
+        android: 'intent://www.amazon.com/Prime-Video#Intent;package=com.amazon.avod.thirdpartyclient;end;'
+      };
+    
+    case 'hulu':
+      return {
+        web: contentUrl || 'https://www.hulu.com',
+        ios: 'hulu://',
+        android: 'intent://www.hulu.com#Intent;package=com.hulu.plus;end;'
+      };
+    
+    case 'hbo max':
+      return {
+        web: contentUrl || 'https://www.max.com',
+        ios: 'hbomax://',
+        android: 'intent://www.max.com#Intent;package=com.hbo.hbonow;end;'
+      };
+    
+    case 'disney+':
+      return {
+        web: contentUrl || 'https://www.disneyplus.com',
+        ios: 'disneyplus://',
+        android: 'intent://www.disneyplus.com#Intent;package=com.disney.disneyplus;end;'
+      };
+    
+    case 'apple tv+':
+      return {
+        web: contentUrl || 'https://tv.apple.com',
+        ios: 'com.apple.tv://',
+        android: fallbackWeb
+      };
+    
+    case 'paramount+':
+      return {
+        web: contentUrl || 'https://www.paramountplus.com',
+        ios: 'cbsaa://',
+        android: 'intent://www.paramountplus.com#Intent;package=com.cbs.app;end;'
+      };
+    
+    case 'peacock':
+      return {
+        web: contentUrl || 'https://www.peacocktv.com',
+        ios: 'peacocktv://',
+        android: 'intent://www.peacocktv.com#Intent;package=com.peacocktv.peacockandroid;end;'
+      };
+    
+    case 'youtube':
+      return {
+        web: contentUrl || 'https://www.youtube.com',
+        ios: 'youtube://',
+        android: 'intent://www.youtube.com#Intent;package=com.google.android.youtube;end;'
+      };
+    
+    case 'crunchyroll':
+      return {
+        web: contentUrl || 'https://www.crunchyroll.com',
+        ios: 'crunchyroll://',
+        android: 'intent://www.crunchyroll.com#Intent;package=com.crunchyroll.crunchyroid;end;'
+      };
+
+    case 'tubi':
+      return {
+        web: contentUrl || 'https://tubitv.com',
+        ios: 'tubitv://',
+        android: 'intent://tubitv.com#Intent;package=com.tubitv;end;'
+      };
+    
+    case 'pluto tv':
+      return {
+        web: contentUrl || 'https://pluto.tv',
+        ios: 'plutotv://',
+        android: 'intent://pluto.tv#Intent;package=tv.pluto.android;end;'
+      };
+
+    case 'vudu':
+      return {
+        web: contentUrl || 'https://www.vudu.com',
+        ios: 'vudu://',
+        android: 'intent://www.vudu.com#Intent;package=air.com.vudu.air.DownloaderTablet;end;'
+      };
+
+    case 'mubi':
+      return {
+        web: contentUrl || 'https://mubi.com',
+        ios: 'mubi://',
+        android: 'intent://mubi.com#Intent;package=com.mubi;end;'
+      };
+
+    default:
+      return {
+        web: fallbackWeb
+      };
+  }
+};
+
+// Smart function to open streaming service
+const openStreamingService = (platformName: string, contentUrl?: string): void => {
+  const urls = getStreamingUrls(platformName, contentUrl);
+  
+  if (!isMobile()) {
+    // Desktop: Always open web URL
+    window.open(urls.web, '_blank', 'noopener,noreferrer');
+    return;
+  }
+  
+  // Mobile: Try to open app, fallback to web
+  let appUrl: string | undefined;
+  
+  if (isIOS() && urls.ios) {
+    appUrl = urls.ios;
+  } else if (isAndroid() && urls.android) {
+    appUrl = urls.android;
+  }
+  
+  if (appUrl && !appUrl.startsWith('intent://')) {
+    // For iOS and simple schemes, use the iframe method
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    iframe.style.position = 'absolute';
+    iframe.style.top = '-1000px';
+    iframe.src = appUrl;
+    document.body.appendChild(iframe);
+    
+    setTimeout(() => {
+      document.body.removeChild(iframe);
+      // If we're still here, the app probably didn't open
+      if (document.hasFocus()) {
+        window.open(urls.web, '_blank', 'noopener,noreferrer');
+      }
+    }, 1500);
+  } else if (appUrl) {
+    // For Android intent URLs, use location.href
+    try {
+      window.location.href = appUrl;
+      // Fallback after delay
+      setTimeout(() => {
+        window.open(urls.web, '_blank', 'noopener,noreferrer');
+      }, 2000);
+    } catch (error) {
+      window.open(urls.web, '_blank', 'noopener,noreferrer');
+    }
+  } else {
+    window.open(urls.web, '_blank', 'noopener,noreferrer');
+  }
+};
+
+interface Offer {
+  platform: string;
+  platformName: string;
+  url?: string;
+  price?: string;
+  type: string;
+}
+
 export default function StreamingProviders({ movieId, title, type, region }: Props) {
   const t = useTranslations();
   const [streamingData, setStreamingData] = useState<StreamingAvailability | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [clickingCard, setClickingCard] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchStreamingData = async () => {
@@ -78,6 +265,90 @@ export default function StreamingProviders({ movieId, title, type, region }: Pro
 
     fetchStreamingData();
   }, [movieId, type, region]);
+
+  const handlePlatformClick = async (offer: Offer) => {
+    const cardKey = `${offer.platform}-${offer.type}`;
+    setClickingCard(cardKey);
+    
+    try {
+      // Add small delay for visual feedback
+      await new Promise(resolve => setTimeout(resolve, 150));
+      
+      // Use the smart platform opening function
+      openStreamingService(offer.platformName, offer.url);
+      
+    } catch (error) {
+      console.error('Error opening streaming service:', error);
+      // Fallback to regular window.open
+      if (offer.url) {
+        window.open(offer.url, '_blank', 'noopener,noreferrer');
+      }
+    } finally {
+      // Clear the clicking state after a delay
+      setTimeout(() => setClickingCard(null), 300);
+    }
+  };
+
+  function PlatformCard({ offer, index, showPrice = false }: { offer: Offer; index: number; showPrice?: boolean }) {
+    const cardKey = `${offer.platform}-${offer.type}-${index}`;
+    const isClicking = clickingCard === cardKey;
+    const mobile = isMobile();
+    
+    return (
+      <div
+        key={cardKey}
+        className="group cursor-pointer transform transition-all duration-200 hover:scale-105 active:scale-95"
+        onClick={() => handlePlatformClick(offer)}
+      >
+        <div className={`
+          bg-gradient-to-br ${platformColors[offer.platformName] || 'from-gray-600 to-gray-700'} 
+          rounded-xl p-4 shadow-lg hover:shadow-xl transition-all duration-300 
+          hover:-translate-y-1 border border-white/10 hover:border-white/20
+          ${isClicking ? 'scale-95 shadow-inner' : ''}
+          relative overflow-hidden
+        `}>
+          {/* Shimmer effect */}
+          <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+          
+          <div className="flex items-center justify-between relative z-10">
+            <div className="flex items-center gap-3">
+              <div className="text-2xl flex-shrink-0">{platformIcons[offer.platformName] || '📺'}</div>
+              <div className="min-w-0 flex-1">
+                <div className="font-bold text-white text-sm truncate">{offer.platformName}</div>
+                <div className="text-white/80 text-xs flex items-center gap-1">
+                  {showPrice ? (offer.price || 'Check Price') : 'Included'}
+                  {mobile && (
+                    <span className="text-white/60 text-xs">• Tap to open {offer.platformName === 'Apple TV+' ? 'web' : 'app'}</span>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center justify-center h-full pl-2 flex-shrink-0">
+              {isClicking ? (
+                <div className="w-5 h-5 border-2 border-white/60 border-t-white rounded-full animate-spin" />
+              ) : (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white/60 group-hover:text-white transition-colors group-hover:translate-x-1">
+                  {mobile ? (
+                    // Mobile icon (phone/app)
+                    <>
+                      <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+                      <line x1="12" y1="18" x2="12.01" y2="18"/>
+                    </>
+                  ) : (
+                    // Desktop icon (arrow)
+                    <>
+                      <line x1="5" y1="12" x2="19" y2="12" />
+                      <polyline points="12 5 19 12 12 19" />
+                    </>
+                  )}
+                </svg>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
@@ -145,47 +416,6 @@ export default function StreamingProviders({ movieId, title, type, region }: Pro
   const buyOffers = offers.filter(o => o.type === 'buy');
   const freeOffers = offers.filter(o => o.type === 'free');
 
-
-
-  // Move Offer and PlatformCard outside to avoid redeclaration and ensure proper typing
-  interface Offer {
-    platform: string;
-    platformName: string;
-    url?: string;
-    price?: string;
-    type: string;
-  }
-
-  function PlatformCard({ offer, index, showPrice = false }: { offer: Offer; index: number; showPrice?: boolean }) {
-    return (
-      <div
-        key={`${offer.platform}-${index}`}
-        className="group cursor-pointer"
-        onClick={() => offer.url && window.open(offer.url, '_blank')}
-      >
-        <div className={`bg-gradient-to-br ${platformColors[offer.platformName] || 'from-gray-600 to-gray-700'} rounded-xl p-4 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 hover:-translate-y-1`}>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="text-2xl">{platformIcons[offer.platformName] || '📺'}</div>
-              <div>
-                <div className="font-bold text-white text-sm">{offer.platformName}</div>
-                <div className="text-white/80 text-xs">
-                  {showPrice ? (offer.price || 'Check Price') : 'Included'}
-                </div>
-              </div>
-            </div>
-            <div className="flex items-center justify-center h-full pl-2">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white/60 group-hover:text-white transition-colors">
-                <line x1="5" y1="12" x2="19" y2="12" />
-                <polyline points="12 5 19 12 12 19" />
-              </svg>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="bg-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-8">
       <div className="flex items-center gap-3 mb-8">
@@ -195,8 +425,14 @@ export default function StreamingProviders({ movieId, title, type, region }: Pro
             <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
           </svg>
         </div>
-  {/* Use translation for app name */}
-  <h3 className="text-2xl font-bold text-white">{t("appName")}</h3>
+        <h3 className="text-2xl font-bold text-white">{t("appName")}</h3>
+        {isMobile() && (
+          <div className="ml-auto">
+            <div className="px-3 py-1 bg-blue-500/20 rounded-full text-blue-300 text-xs font-medium border border-blue-400/30">
+              📱 Tap to open apps
+            </div>
+          </div>
+        )}
       </div>
       
       {/* Streaming Services */}
@@ -299,6 +535,21 @@ export default function StreamingProviders({ movieId, title, type, region }: Pro
             </div>
           )}
         </div>
+        
+        {/* Mobile instruction */}
+        {isMobile() && offers.length > 0 && (
+          <div className="mt-4 p-3 bg-blue-500/10 border border-blue-400/20 rounded-lg">
+            <div className="flex items-start gap-2 text-blue-300">
+              <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 flex-shrink-0">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1"/>
+              </svg>
+              <p className="text-sm">
+                <span className="font-medium">Mobile tip:</span> Tap any service to open its app if installed, or visit the website if not available.
+              </p>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
