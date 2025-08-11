@@ -164,7 +164,6 @@ function ResultsPageContent() {
               </div>
               <div className="hidden lg:block">
                 <h1 className="text-lg font-bold text-white">StreamFinder</h1>
-                <p className="text-white/60 text-xs">{t("providersLabel")}</p>
               </div>
             </div>
             <RegionSelector />

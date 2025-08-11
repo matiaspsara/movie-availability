@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   title: "Where to Watch",
   description: "Find where to stream, rent, or buy movies and TV shows in your region.",
   icons: {
-    icon: "/favicon.ico",
+    icon: "/popIcon.ico",
   },
 };
 

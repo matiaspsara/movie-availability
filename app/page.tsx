@@ -36,10 +36,9 @@ export default function Homepage() {
 						<div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-2xl">
 							<span className="text-2xl">🎬</span>
 						</div>
-						<div>
-							<h1 className="text-xl font-bold text-white">WhereToWatch</h1>
-							<p className="text-white/60 text-sm">{t("providersLabel")}</p>
-						</div>
+									<div>
+										<h1 className="text-xl font-bold text-white">WhereToWatch</h1>
+									</div>
 					</div>
 					<RegionSelector />
 				</header>
