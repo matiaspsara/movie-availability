@@ -21,8 +21,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       tmdbSearch(q, 'tv', region as string),
     ]);
 
-    const results = [
-      ...movies.results.map((item: { id: number; title: string; release_date?: string; poster_path?: string }) => ({
+    // Combine and normalize results
+    const combined = [
+      ...movies.results.map((item: { id: number; title: string; release_date?: string; poster_path?: string; popularity?: number }) => ({
         id: item.id,
         title: item.title,
         year: item.release_date ? item.release_date.slice(0, 4) : '—',
@@ -30,8 +31,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         poster: item.poster_path
           ? `https://image.tmdb.org/t/p/w92${item.poster_path}`
           : null,
+        popularity: item.popularity ?? 0,
       })),
-      ...tv.results.map((item: { id: number; name: string; first_air_date?: string; poster_path?: string }) => ({
+      ...tv.results.map((item: { id: number; name: string; first_air_date?: string; poster_path?: string; popularity?: number }) => ({
         id: item.id,
         title: item.name,
         year: item.first_air_date ? item.first_air_date.slice(0, 4) : '—',
@@ -39,9 +41,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         poster: item.poster_path
           ? `https://image.tmdb.org/t/p/w92${item.poster_path}`
           : null,
+        popularity: item.popularity ?? 0,
       })),
-    ].slice(0, 10);
+    ];
 
+    // Sort by relevance: exact match (case-insensitive), then popularity
+    const lowerQ = q.trim().toLowerCase();
+    combined.sort((a, b) => {
+      // Exact match first
+      const aExact = a.title.trim().toLowerCase() === lowerQ ? 1 : 0;
+      const bExact = b.title.trim().toLowerCase() === lowerQ ? 1 : 0;
+      if (aExact !== bExact) return bExact - aExact;
+      // Higher popularity first
+      return b.popularity - a.popularity;
+    });
+
+    const results = combined.slice(0, 10).map(({ popularity, ...rest }) => rest);
     cache.set(cacheKey, results);
     res.status(200).json(results);
   } catch (err) {
