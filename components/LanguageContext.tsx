@@ -3,7 +3,7 @@ import { createContext, useContext, useState, ReactNode } from "react";
 
 const LanguageContext = createContext({
   language: "en",
-  setLanguage: (_: string) => {},
+  setLanguage: (lang: string) => {},
 });
 
 export function LanguageProvider({ children }: { children: ReactNode }) {

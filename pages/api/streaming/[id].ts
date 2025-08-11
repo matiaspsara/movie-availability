@@ -32,14 +32,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const tmdbData = await tmdbResponse.json();
     
-    // Extract title and year
-    const title = tmdbData.title || tmdbData.name || 'Unknown';
-    const year = tmdbData.release_date?.slice(0, 4) || tmdbData.first_air_date?.slice(0, 4) || '2020';
     
     const streamingData = await getStreamingAvailability(
-  id,
-  region,
-  type as 'movie' | 'tv'
+      id as string,
+      region as string,
+      type as 'movie' | 'tv'
     );
 
     res.status(200).json(streamingData);

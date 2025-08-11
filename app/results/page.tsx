@@ -216,7 +216,7 @@ function ResultsPageContent() {
                     {displayTitle}
                   </h1>
                   {movieDetails.tagline && (
-                    <p className="text-xl text-white/70 italic mb-4">"{movieDetails.tagline}"</p>
+                    <p className="text-xl text-white/70 italic mb-4">&quot;{movieDetails.tagline}&quot;</p>
                   )}
                   
                   {/* Meta Info */}

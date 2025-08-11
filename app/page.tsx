@@ -9,6 +9,7 @@ type SearchResult = {
   poster_path?: string;
 };
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 // Mock Region Context for demo
@@ -23,7 +24,7 @@ function SearchBar() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchResult[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [selectedRegion, setSelectedRegion] = useState(regions[1]); // AR default
+  const [selectedRegion] = useState(regions[1]); // AR default
   const router = useRouter();
 
   useEffect(() => {
@@ -97,9 +98,11 @@ function SearchBar() {
               onClick={() => handleResultClick(result)}
             >
               <div className="w-12 h-16 rounded-lg overflow-hidden shadow-lg flex-shrink-0">
-                <img 
-                  src={result.poster_path || result.poster} 
+                <Image
+                  src={result.poster_path || result.poster || ''}
                   alt={result.title}
+                  width={48}
+                  height={64}
                   className="w-full h-full object-cover"
                 />
               </div>

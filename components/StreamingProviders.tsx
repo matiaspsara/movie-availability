@@ -145,32 +145,45 @@ export default function StreamingProviders({ movieId, title, type, region }: Pro
   const buyOffers = offers.filter(o => o.type === 'buy');
   const freeOffers = offers.filter(o => o.type === 'free');
 
-  const PlatformCard = ({ offer, index, showPrice = false }: { offer: any, index: number, showPrice?: boolean }) => (
-    <div
-      key={`${offer.platform}-${index}`}
-      className="group cursor-pointer"
-      onClick={() => offer.url && window.open(offer.url, '_blank')}
-    >
-      <div className={`bg-gradient-to-br ${platformColors[offer.platformName] || 'from-gray-600 to-gray-700'} rounded-xl p-4 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 hover:-translate-y-1`}>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="text-2xl">{platformIcons[offer.platformName] || '📺'}</div>
-            <div>
-              <div className="font-bold text-white text-sm">{offer.platformName}</div>
-              <div className="text-white/80 text-xs">
-                {showPrice ? (offer.price || 'Check Price') : 'Included'}
+
+
+  // Move Offer and PlatformCard outside to avoid redeclaration and ensure proper typing
+  interface Offer {
+    platform: string;
+    platformName: string;
+    url?: string;
+    price?: string;
+    type: string;
+  }
+
+  function PlatformCard({ offer, index, showPrice = false }: { offer: Offer; index: number; showPrice?: boolean }) {
+    return (
+      <div
+        key={`${offer.platform}-${index}`}
+        className="group cursor-pointer"
+        onClick={() => offer.url && window.open(offer.url, '_blank')}
+      >
+        <div className={`bg-gradient-to-br ${platformColors[offer.platformName] || 'from-gray-600 to-gray-700'} rounded-xl p-4 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 hover:-translate-y-1`}>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="text-2xl">{platformIcons[offer.platformName] || '📺'}</div>
+              <div>
+                <div className="font-bold text-white text-sm">{offer.platformName}</div>
+                <div className="text-white/80 text-xs">
+                  {showPrice ? (offer.price || 'Check Price') : 'Included'}
+                </div>
               </div>
             </div>
-          </div>
-          <div className="text-white/60 group-hover:text-white transition-colors">
-            <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M7 17L17 7M17 7H7M17 7V17"/>
-            </svg>
+            <div className="text-white/60 group-hover:text-white transition-colors">
+              <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M7 17L17 7M17 7H7M17 7V17" />
+              </svg>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
 
   return (
     <div className="bg-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-8">
@@ -196,7 +209,7 @@ export default function StreamingProviders({ movieId, title, type, region }: Pro
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {streamingOffers.map((offer, index) => (
+            {streamingOffers.map((offer: Offer, index: number) => (
               <PlatformCard key={`stream-${index}`} offer={offer} index={index} />
             ))}
           </div>
@@ -214,7 +227,7 @@ export default function StreamingProviders({ movieId, title, type, region }: Pro
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {rentOffers.map((offer, index) => (
+            {rentOffers.map((offer: Offer, index: number) => (
               <PlatformCard key={`rent-${index}`} offer={offer} index={index} showPrice />
             ))}
           </div>
@@ -232,7 +245,7 @@ export default function StreamingProviders({ movieId, title, type, region }: Pro
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {buyOffers.map((offer, index) => (
+            {buyOffers.map((offer: Offer, index: number) => (
               <PlatformCard key={`buy-${index}`} offer={offer} index={index} showPrice />
             ))}
           </div>
@@ -250,7 +263,7 @@ export default function StreamingProviders({ movieId, title, type, region }: Pro
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {freeOffers.map((offer, index) => (
+            {freeOffers.map((offer: Offer, index: number) => (
               <PlatformCard key={`free-${index}`} offer={offer} index={index} />
             ))}
           </div>
