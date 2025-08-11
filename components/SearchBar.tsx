@@ -88,7 +88,7 @@ export default function SearchBar() {
             <input
               type="text"
               placeholder="Search for movies, TV shows..."
-              className="w-full pl-16 pr-20 py-6 bg-transparent text-white placeholder-white/60 text-lg font-medium focus:outline-none"
+              className="w-full pl-14 pr-16 py-5 sm:pl-16 sm:pr-20 sm:py-6 bg-transparent text-white placeholder-white/60 text-base sm:text-lg font-medium focus:outline-none"
               value={query}
               onChange={e => setQuery(e.target.value)}
             />
