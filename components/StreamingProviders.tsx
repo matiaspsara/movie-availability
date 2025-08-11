@@ -174,9 +174,10 @@ export default function StreamingProviders({ movieId, title, type, region }: Pro
                 </div>
               </div>
             </div>
-            <div className="text-white/60 group-hover:text-white transition-colors">
-              <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M7 17L17 7M17 7H7M17 7V17" />
+            <div className="flex items-center justify-center h-full pl-2">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white/60 group-hover:text-white transition-colors">
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
               </svg>
             </div>
           </div>
