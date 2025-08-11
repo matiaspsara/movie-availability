@@ -56,7 +56,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return b.popularity - a.popularity;
     });
 
-    const results = combined.slice(0, 10).map(({ popularity, ...rest }) => rest);
+    // Only include results with a poster image
+    const results = combined
+      .filter(item => !!item.poster)
+      .slice(0, 10)
+      .map(({ popularity, ...rest }) => rest);
     cache.set(cacheKey, results);
     res.status(200).json(results);
   } catch (err) {
