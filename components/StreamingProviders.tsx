@@ -301,14 +301,11 @@ export default function StreamingProviders({ movieId, title, type, region }: Pro
         onClick={() => handlePlatformClick(offer)}
       >
         <div className={`
-          bg-gradient-to-br ${platformColors[offer.platformName] || 'from-gray-600 to-gray-700'} 
-          rounded-xl p-4 shadow-lg hover:shadow-xl transition-all duration-300 
-          hover:-translate-y-1 border border-white/10 hover:border-white/20
-          ${isClicking ? 'scale-95 shadow-inner' : ''}
-          relative overflow-hidden
+          bg-gradient-to-br ${platformColors[offer.platformName] || 'from-gray-600 to-gray-700'}
+          rounded-xl p-4 transition-all duration-200
+          hover:-translate-y-0.5 border border-white/10
+          ${isClicking ? 'scale-95' : ''}
         `}>
-          {/* Shimmer effect */}
-          <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
           
           <div className="flex items-center justify-between relative z-10">
             <div className="flex items-center gap-3">
@@ -352,14 +349,14 @@ export default function StreamingProviders({ movieId, title, type, region }: Pro
 
   if (loading) {
     return (
-      <div className="bg-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-8">
+      <div className="bg-[#141414] border border-[#2a2a2a] rounded-2xl p-8">
         <div className="animate-pulse space-y-6">
-          <div className="h-8 bg-gradient-to-r from-white/20 to-white/10 rounded-lg w-1/3"></div>
+          <div className="h-6 bg-[#222222] rounded-lg w-1/3"></div>
           <div className="space-y-4">
-            <div className="h-6 bg-gradient-to-r from-white/15 to-white/5 rounded w-1/2"></div>
+            <div className="h-5 bg-[#1a1a1a] rounded w-1/4"></div>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {[...Array(6)].map((_, i) => (
-                <div key={i} className="h-20 bg-gradient-to-r from-white/10 to-white/5 rounded-xl"></div>
+                <div key={i} className="h-20 bg-[#1a1a1a] rounded-xl"></div>
               ))}
             </div>
           </div>
@@ -370,19 +367,9 @@ export default function StreamingProviders({ movieId, title, type, region }: Pro
 
   if (error || !streamingData) {
     return (
-      <div className="bg-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-8">
+      <div className="bg-[#141414] border border-[#2a2a2a] rounded-2xl p-8">
         <div className="text-center">
-          <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-red-400">
-              <circle cx="12" cy="12" r="10"/>
-              <line x1="15" y1="9" x2="9" y2="15"/>
-              <line x1="9" y1="9" x2="15" y2="15"/>
-            </svg>
-          </div>
-          <h3 className="text-lg font-semibold text-white mb-2">Unable to Load</h3>
-          <p className="text-white/60">
-            Unable to load streaming availability at this time.
-          </p>
+          <h3 className="text-base font-medium text-[#a1a1a1] mb-1">Unable to load streaming availability</h3>
         </div>
       </div>
     );
@@ -392,18 +379,11 @@ export default function StreamingProviders({ movieId, title, type, region }: Pro
 
   if (offers.length === 0) {
     return (
-      <div className="bg-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-8">
+      <div className="bg-[#141414] border border-[#2a2a2a] rounded-2xl p-8">
         <div className="text-center">
-          <div className="w-16 h-16 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-yellow-400">
-              <circle cx="12" cy="12" r="10"/>
-              <line x1="12" y1="8" x2="12" y2="12"/>
-              <line x1="12" y1="16" x2="12.01" y2="16"/>
-            </svg>
-          </div>
-          <h3 className="text-lg font-semibold text-white mb-2">Not Available</h3>
-          <p className="text-white/60">
-            No streaming information available for <span className="text-white font-medium">{title}</span> in {region}.
+          <h3 className="text-base font-medium text-[#a1a1a1] mb-1">Not available in {region}</h3>
+          <p className="text-[#555555] text-sm">
+            No streaming information found for <span className="text-[#a1a1a1]">{title}</span>.
           </p>
         </div>
       </div>
@@ -417,35 +397,21 @@ export default function StreamingProviders({ movieId, title, type, region }: Pro
   const freeOffers = offers.filter(o => o.type === 'free');
 
   return (
-    <div className="bg-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-8">
-      <div className="flex items-center gap-3 mb-8">
-        <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-          <svg width="20" height="20" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <polygon points="23 7 16 12 23 17 23 7"/>
-            <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
-          </svg>
-        </div>
-        <h3 className="text-2xl font-bold text-white">{t("appName")}</h3>
+    <div className="bg-[#141414] border border-[#2a2a2a] rounded-2xl p-8">
+      <div className="flex items-center justify-between mb-8">
+        <h3 className="text-lg font-semibold text-white">Where to Watch</h3>
         {isMobile() && (
-          <div className="ml-auto">
-            <div className="px-3 py-1 bg-blue-500/20 rounded-full text-blue-300 text-xs font-medium border border-blue-400/30">
-              📱 Tap to open apps
-            </div>
-          </div>
+          <span className="text-[#555555] text-xs">Tap to open app</span>
         )}
       </div>
-      
+
       {/* Streaming Services */}
       {streamingOffers.length > 0 && (
         <div className="mb-8">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-            <h4 className="text-lg font-semibold text-white">Streaming Services</h4>
-            <div className="px-3 py-1 bg-green-500/20 rounded-full text-green-400 text-xs font-medium">
-              {streamingOffers.length} available
-            </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <h4 className="text-xs font-semibold text-[#555555] uppercase tracking-wider mb-4">
+            Streaming — {streamingOffers.length} available
+          </h4>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {streamingOffers.map((offer: Offer, index: number) => (
               <PlatformCard key={`stream-${index}`} offer={offer} index={index} />
             ))}
@@ -456,14 +422,10 @@ export default function StreamingProviders({ movieId, title, type, region }: Pro
       {/* Rent Options */}
       {rentOffers.length > 0 && (
         <div className="mb-8">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-3 h-3 bg-blue-400 rounded-full animate-pulse"></div>
-            <h4 className="text-lg font-semibold text-white">Rent</h4>
-            <div className="px-3 py-1 bg-blue-500/20 rounded-full text-blue-400 text-xs font-medium">
-              {rentOffers.length} available
-            </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <h4 className="text-xs font-semibold text-[#555555] uppercase tracking-wider mb-4">
+            Rent — {rentOffers.length} available
+          </h4>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {rentOffers.map((offer: Offer, index: number) => (
               <PlatformCard key={`rent-${index}`} offer={offer} index={index} showPrice />
             ))}
@@ -474,14 +436,10 @@ export default function StreamingProviders({ movieId, title, type, region }: Pro
       {/* Buy Options */}
       {buyOffers.length > 0 && (
         <div className="mb-8">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-3 h-3 bg-purple-400 rounded-full animate-pulse"></div>
-            <h4 className="text-lg font-semibold text-white">Buy</h4>
-            <div className="px-3 py-1 bg-purple-500/20 rounded-full text-purple-400 text-xs font-medium">
-              {buyOffers.length} available
-            </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <h4 className="text-xs font-semibold text-[#555555] uppercase tracking-wider mb-4">
+            Buy — {buyOffers.length} available
+          </h4>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {buyOffers.map((offer: Offer, index: number) => (
               <PlatformCard key={`buy-${index}`} offer={offer} index={index} showPrice />
             ))}
@@ -492,14 +450,10 @@ export default function StreamingProviders({ movieId, title, type, region }: Pro
       {/* Free Options */}
       {freeOffers.length > 0 && (
         <div className="mb-8">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-3 h-3 bg-yellow-400 rounded-full animate-pulse"></div>
-            <h4 className="text-lg font-semibold text-white">Free</h4>
-            <div className="px-3 py-1 bg-yellow-500/20 rounded-full text-yellow-400 text-xs font-medium">
-              {freeOffers.length} available
-            </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <h4 className="text-xs font-semibold text-[#555555] uppercase tracking-wider mb-4">
+            Free — {freeOffers.length} available
+          </h4>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {freeOffers.map((offer: Offer, index: number) => (
               <PlatformCard key={`free-${index}`} offer={offer} index={index} />
             ))}
@@ -508,48 +462,29 @@ export default function StreamingProviders({ movieId, title, type, region }: Pro
       )}
 
       {/* Summary */}
-      <div className="pt-6 border-t border-white/10">
-        <div className="flex flex-wrap gap-3">
+      <div className="pt-6 border-t border-[#2a2a2a]">
+        <div className="flex flex-wrap gap-2">
           {hasStreaming && (
-            <div className="flex items-center gap-2 bg-green-500/20 text-green-400 px-4 py-2 rounded-lg border border-green-500/30">
-              <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-              <span className="text-sm font-medium">Streaming Available</span>
+            <div className="px-3 py-1.5 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg text-[#a1a1a1] text-xs font-medium">
+              Streaming
             </div>
           )}
           {hasRent && (
-            <div className="flex items-center gap-2 bg-blue-500/20 text-blue-400 px-4 py-2 rounded-lg border border-blue-500/30">
-              <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-              <span className="text-sm font-medium">Rent Available</span>
+            <div className="px-3 py-1.5 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg text-[#a1a1a1] text-xs font-medium">
+              Rent
             </div>
           )}
           {hasBuy && (
-            <div className="flex items-center gap-2 bg-purple-500/20 text-purple-400 px-4 py-2 rounded-lg border border-purple-500/30">
-              <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
-              <span className="text-sm font-medium">Buy Available</span>
+            <div className="px-3 py-1.5 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg text-[#a1a1a1] text-xs font-medium">
+              Buy
             </div>
           )}
           {hasFree && (
-            <div className="flex items-center gap-2 bg-yellow-500/20 text-yellow-400 px-4 py-2 rounded-lg border border-yellow-500/30">
-              <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
-              <span className="text-sm font-medium">Free Available</span>
+            <div className="px-3 py-1.5 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg text-[#a1a1a1] text-xs font-medium">
+              Free
             </div>
           )}
         </div>
-        
-        {/* Mobile instruction */}
-        {isMobile() && offers.length > 0 && (
-          <div className="mt-4 p-3 bg-blue-500/10 border border-blue-400/20 rounded-lg">
-            <div className="flex items-start gap-2 text-blue-300">
-              <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 flex-shrink-0">
-                <circle cx="12" cy="12" r="3"/>
-                <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1"/>
-              </svg>
-              <p className="text-sm">
-                <span className="font-medium">Mobile tip:</span> Tap any service to open its app if installed, or visit the website if not available.
-              </p>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

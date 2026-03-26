@@ -44,7 +44,7 @@ export default function RegionSelector() {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-3 bg-white/10 backdrop-blur-xl border border-white/20 rounded-xl px-4 py-3 text-white hover:bg-white/20 transition-all duration-300 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-white/20"
+        className="flex items-center gap-2 bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl px-3 py-2.5 text-white hover:bg-[#222222] hover:border-[#3a3a3a] transition-colors duration-200 focus:outline-none"
         aria-expanded={isOpen}
         aria-haspopup="listbox"
       >
@@ -66,14 +66,14 @@ export default function RegionSelector() {
       </button>
       
       {isOpen && (
-        <div className="absolute right-0 top-full mt-2 min-w-[120px] bg-white/10 backdrop-blur-xl border border-white/20 rounded-xl shadow-2xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+        <div className="absolute right-0 top-full mt-2 min-w-[120px] bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl shadow-2xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
           <div className="py-2" role="listbox">
             {regions.map(region => (
               <button
                 key={region.code}
                 onClick={() => handleRegionChange(region)}
-                className={`flex items-center gap-3 w-full px-4 py-3 text-white hover:bg-white/20 transition-all duration-200 text-left ${
-                  selectedRegion.code === region.code ? 'bg-white/10' : ''
+                className={`flex items-center gap-3 w-full px-4 py-2.5 text-white hover:bg-[#222222] transition-colors duration-150 text-left ${
+                  selectedRegion.code === region.code ? 'bg-[#222222]' : ''
                 }`}
                 role="option"
                 aria-selected={selectedRegion.code === region.code}
@@ -89,7 +89,7 @@ export default function RegionSelector() {
                     strokeWidth="2" 
                     strokeLinecap="round" 
                     strokeLinejoin="round"
-                    className="ml-auto text-blue-400 flex-shrink-0"
+                    className="ml-auto text-white flex-shrink-0"
                     viewBox="0 0 24 24"
                   >
                     <polyline points="20,6 9,17 4,12"/>

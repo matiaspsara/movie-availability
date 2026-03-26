@@ -1,43 +1,34 @@
 import React from "react";
 
 const MovieActions: React.FC = () => (
-  <div className="bg-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-8">
-    <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
-      <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="object-contain">
-          <circle cx="12" cy="5" r="2" />
-          <circle cx="12" cy="12" r="2" />
-          <circle cx="12" cy="19" r="2" />
-        </svg>
-      </div>
-      More Options
-    </h3>
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <button className="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl p-4 text-white transition-all duration-300 hover:scale-105">
-        <div className="w-12 h-12 bg-red-500/20 rounded-lg flex items-center justify-center">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="object-contain">
+  <div className="bg-[#141414] border border-[#2a2a2a] rounded-2xl p-8">
+    <h3 className="text-sm font-semibold text-[#555555] uppercase tracking-wider mb-6">More Options</h3>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+      <button className="flex items-center gap-3 bg-[#1a1a1a] hover:bg-[#222222] border border-[#2a2a2a] hover:border-[#3a3a3a] rounded-xl p-4 text-white transition-colors duration-200">
+        <div className="w-10 h-10 bg-[#222222] rounded-lg flex items-center justify-center flex-shrink-0">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <polygon points="5,3 19,12 5,21"/>
           </svg>
         </div>
         <div className="text-left">
-          <div className="font-semibold">Watch Trailer</div>
-          <div className="text-sm text-white/60">View on YouTube</div>
+          <div className="font-medium text-sm">Watch Trailer</div>
+          <div className="text-xs text-[#555555]">View on YouTube</div>
         </div>
       </button>
-      <button className="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl p-4 text-white transition-all duration-300 hover:scale-105">
-        <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="object-contain">
+      <button className="flex items-center gap-3 bg-[#1a1a1a] hover:bg-[#222222] border border-[#2a2a2a] hover:border-[#3a3a3a] rounded-xl p-4 text-white transition-colors duration-200">
+        <div className="w-10 h-10 bg-[#222222] rounded-lg flex items-center justify-center flex-shrink-0">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7z"/>
           </svg>
         </div>
         <div className="text-left">
-          <div className="font-semibold">Add to Watchlist</div>
-          <div className="text-sm text-white/60">Save for later</div>
+          <div className="font-medium text-sm">Add to Watchlist</div>
+          <div className="text-xs text-[#555555]">Save for later</div>
         </div>
       </button>
-      <button className="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl p-4 text-white transition-all duration-300 hover:scale-105">
-        <div className="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="object-contain">
+      <button className="flex items-center gap-3 bg-[#1a1a1a] hover:bg-[#222222] border border-[#2a2a2a] hover:border-[#3a3a3a] rounded-xl p-4 text-white transition-colors duration-200">
+        <div className="w-10 h-10 bg-[#222222] rounded-lg flex items-center justify-center flex-shrink-0">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="18" cy="5" r="3"/>
             <circle cx="6" cy="12" r="3"/>
             <circle cx="18" cy="19" r="3"/>
@@ -46,8 +37,8 @@ const MovieActions: React.FC = () => (
           </svg>
         </div>
         <div className="text-left">
-          <div className="font-semibold">Share</div>
-          <div className="text-sm text-white/60">Tell friends</div>
+          <div className="font-medium text-sm">Share</div>
+          <div className="text-xs text-[#555555]">Tell friends</div>
         </div>
       </button>
     </div>

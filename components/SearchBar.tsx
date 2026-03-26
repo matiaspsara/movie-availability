@@ -61,10 +61,9 @@ export default function SearchBar() {
     <div className="relative w-full">
       <form onSubmit={handleSubmit}>
         {/* Search Input */}
-        <div className="relative group">
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-40 group-focus-within:opacity-40 transition duration-300"></div>
-          <div className="relative bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl overflow-hidden shadow-2xl">
-            <div className="absolute left-6 top-1/2 -translate-y-1/2 text-white/60 pointer-events-none">
+        <div className="relative">
+          <div className="bg-[#1a1a1a] border border-[#2a2a2a] focus-within:border-[#3a3a3a] rounded-2xl overflow-hidden transition-colors duration-200">
+            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-[#555555] pointer-events-none">
               {isLoading ? (
                 <div className="animate-spin">
                   <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -88,11 +87,10 @@ export default function SearchBar() {
             <input
               type="text"
               placeholder="Search for movies, TV shows..."
-              className="w-full pl-14 pr-16 py-5 sm:pl-16 sm:pr-20 sm:py-6 bg-transparent text-white placeholder-white/60 text-base sm:text-lg font-medium focus:outline-none"
+              className="w-full pl-12 pr-5 py-4 sm:py-5 bg-transparent text-white placeholder-[#555555] text-base sm:text-lg focus:outline-none"
               value={query}
               onChange={e => setQuery(e.target.value)}
             />
-            {/* Search button removed as requested */}
           </div>
         </div>
       </form>
@@ -100,28 +98,27 @@ export default function SearchBar() {
       {/* Search Results Dropdown */}
       {showDropdown && results.length > 0 && (
         <div
-          className="absolute z-50 w-full mt-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl 
-               max-h-80 overflow-y-auto scrollbar-thin scrollbar-track-white/10 scrollbar-thumb-white/30"
-          style={{ overscrollBehavior: 'contain' }} // prevent page scroll
+          className="absolute z-50 w-full mt-2 bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl shadow-2xl max-h-80 overflow-y-auto scrollbar-thin scrollbar-track-white/10"
+          style={{ overscrollBehavior: 'contain' }}
         >
           {results.map(result => (
             <div
               key={`${result.type}-${result.id}`}
-              className="px-6 py-4 hover:bg-white/10 cursor-pointer transition-all duration-200 flex items-center gap-4 border-b border-white/10 last:border-b-0"
+              className="px-4 py-3 hover:bg-[#222222] cursor-pointer transition-colors duration-150 flex items-center gap-4 border-b border-[#2a2a2a] last:border-b-0"
               onClick={() => handleResultClick(result)}
             >
-              <div className="w-12 h-16 rounded-lg overflow-hidden shadow-lg flex-shrink-0 bg-gray-700">
+              <div className="w-10 h-14 rounded-md overflow-hidden flex-shrink-0 bg-[#222222]">
                 {result.poster ? (
                   <Image
                     src={result.poster}
                     alt={result.title}
-                    width={48}
-                    height={64}
+                    width={40}
+                    height={56}
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-gray-600 to-gray-800 flex items-center justify-center">
-                    <svg width="20" height="20" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <div className="w-full h-full bg-[#2a2a2a] flex items-center justify-center">
+                    <svg width="16" height="16" fill="none" stroke="#555555" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
                       <circle cx="8.5" cy="8.5" r="1.5" />
                       <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
@@ -130,16 +127,16 @@ export default function SearchBar() {
                 )}
               </div>
               <div className="flex-1 min-w-0">
-                <h4 className="text-white font-semibold text-lg truncate">{result.title}</h4>
-                <div className="flex items-center gap-3 mt-1">
-                  <span className="text-white/60 text-sm">{result.year}</span>
-                  <span className="px-3 py-1 bg-gradient-to-r from-blue-500/20 to-purple-600/20 rounded-full text-white/80 text-xs font-medium border border-white/10">
+                <h4 className="text-white font-medium truncate">{result.title}</h4>
+                <div className="flex items-center gap-2 mt-0.5">
+                  <span className="text-[#555555] text-sm">{result.year}</span>
+                  <span className="px-2 py-0.5 bg-[#222222] rounded text-[#a1a1a1] text-xs border border-[#2a2a2a]">
                     {result.type.toUpperCase()}
                   </span>
                 </div>
               </div>
-              <div className="text-white/40 flex-shrink-0">
-                <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+              <div className="text-[#3a3a3a] flex-shrink-0">
+                <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
                   <path d="m9 18 6-6-6-6" />
                 </svg>
               </div>
@@ -151,16 +148,10 @@ export default function SearchBar() {
 
       {/* Empty State */}
       {showDropdown && results.length === 0 && !isLoading && query.trim() && (
-        <div className="absolute z-50 w-full mt-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl overflow-hidden">
-          <div className="px-6 py-8 text-center">
-            <div className="text-white/60 mb-2">
-              <svg width="48" height="48" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mx-auto mb-4">
-                <circle cx="11" cy="11" r="8" />
-                <path d="m21 21-4.35-4.35" />
-              </svg>
-            </div>
-            <h4 className="text-white font-medium mb-2">No results found</h4>
-            <p className="text-white/60 text-sm">Try searching for a different movie or TV show</p>
+        <div className="absolute z-50 w-full mt-2 bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl shadow-2xl overflow-hidden">
+          <div className="px-6 py-6 text-center">
+            <h4 className="text-[#a1a1a1] font-medium mb-1">No results found</h4>
+            <p className="text-[#555555] text-sm">Try a different title</p>
           </div>
         </div>
       )}
