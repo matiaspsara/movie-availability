@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Where to Watch",
-  description: "Find where to stream, rent, or buy movies and TV shows in your region.",
+  title: "DóndeVer",
+  description: "Encontrá dónde ver tus películas y series en streaming.",
   icons: {
     icon: "/popIcon.ico",
   },

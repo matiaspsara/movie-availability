@@ -42,7 +42,7 @@ export default function Homepage() {
 			<header className="relative z-10 w-full px-6 py-6 flex justify-between items-center">
 				<div className="flex items-center gap-3">
 					<span className="text-2xl">🎬</span>
-					<h1 className="text-lg font-semibold text-white tracking-tight">WhereToWatch</h1>
+					<h1 className="text-lg font-semibold text-white tracking-tight">DóndeVer</h1>
 				</div>
 				<RegionSelector />
 			</header>

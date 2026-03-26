@@ -145,7 +145,7 @@ function ResultsPageContent() {
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
               <span className="text-xl hidden md:inline">🎬</span>
-              <span className="text-base font-semibold text-white hidden lg:inline">WhereToWatch</span>
+              <span className="text-base font-semibold text-white hidden lg:inline">DóndeVer</span>
             </div>
             <RegionSelector />
           </div>
