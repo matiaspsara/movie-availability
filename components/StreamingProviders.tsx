@@ -1,6 +1,6 @@
 'use client';
-import { useTranslations } from "../lib/useTranslations";
 import { useState, useEffect } from 'react';
+import { useTranslations } from "../lib/useTranslations";
 import { StreamingAvailability } from '../lib/justwatch';
 
 interface Props {
@@ -299,7 +299,7 @@ export default function StreamingProviders({ movieId, title, type, region }: Pro
               <div className="min-w-0 flex-1">
                 <div className="font-bold text-white text-sm truncate">{offer.platformName}</div>
                 <div className="text-white/80 text-xs flex items-center gap-1">
-                  {showPrice ? (offer.price || 'Check Price') : 'Included'}
+                  {showPrice ? (offer.price || t('checkPrice')) : t('included')}
                   {mobile && (
                     <span className="text-white/60 text-xs">• Tap to open {offer.platformName === 'Apple TV+' ? 'web' : 'app'}</span>
                   )}
@@ -355,7 +355,7 @@ export default function StreamingProviders({ movieId, title, type, region }: Pro
     return (
       <div className="bg-[#141414] border border-[#2a2a2a] rounded-2xl p-8">
         <div className="text-center">
-          <h3 className="text-base font-medium text-[#a1a1a1] mb-1">Unable to load streaming availability</h3>
+          <h3 className="text-base font-medium text-[#a1a1a1] mb-1">{t('unableToLoad')}</h3>
         </div>
       </div>
     );
@@ -367,9 +367,9 @@ export default function StreamingProviders({ movieId, title, type, region }: Pro
     return (
       <div className="bg-[#141414] border border-[#2a2a2a] rounded-2xl p-8">
         <div className="text-center">
-          <h3 className="text-base font-medium text-[#a1a1a1] mb-1">Not available in {region}</h3>
+          <h3 className="text-base font-medium text-[#a1a1a1] mb-1">{t('notAvailableIn')} {region}</h3>
           <p className="text-[#555555] text-sm">
-            No streaming information found for <span className="text-[#a1a1a1]">{title}</span>.
+            {t('noStreamingInfo')} <span className="text-[#a1a1a1]">{title}</span>.
           </p>
         </div>
       </div>
@@ -385,9 +385,9 @@ export default function StreamingProviders({ movieId, title, type, region }: Pro
   return (
     <div className="bg-[#141414] border border-[#2a2a2a] rounded-2xl p-8">
       <div className="flex items-center justify-between mb-8">
-        <h3 className="text-lg font-semibold text-white">Where to Watch</h3>
+        <h3 className="text-lg font-semibold text-white">{t('whereToWatch')}</h3>
         {isMobile() && (
-          <span className="text-[#555555] text-xs">Tap to open app</span>
+          <span className="text-[#555555] text-xs">{t('tapToOpenApp')}</span>
         )}
       </div>
 
@@ -395,7 +395,7 @@ export default function StreamingProviders({ movieId, title, type, region }: Pro
       {streamingOffers.length > 0 && (
         <div className="mb-8">
           <h4 className="text-xs font-semibold text-[#555555] uppercase tracking-wider mb-4">
-            Streaming — {streamingOffers.length} available
+            {t('streaming')} — {streamingOffers.length} {t('available')}
           </h4>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {streamingOffers.map((offer: Offer, index: number) => (
@@ -409,7 +409,7 @@ export default function StreamingProviders({ movieId, title, type, region }: Pro
       {rentOffers.length > 0 && (
         <div className="mb-8">
           <h4 className="text-xs font-semibold text-[#555555] uppercase tracking-wider mb-4">
-            Rent — {rentOffers.length} available
+            {t('rent')} — {rentOffers.length} {t('available')}
           </h4>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {rentOffers.map((offer: Offer, index: number) => (
@@ -423,7 +423,7 @@ export default function StreamingProviders({ movieId, title, type, region }: Pro
       {buyOffers.length > 0 && (
         <div className="mb-8">
           <h4 className="text-xs font-semibold text-[#555555] uppercase tracking-wider mb-4">
-            Buy — {buyOffers.length} available
+            {t('buy')} — {buyOffers.length} {t('available')}
           </h4>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {buyOffers.map((offer: Offer, index: number) => (
@@ -437,7 +437,7 @@ export default function StreamingProviders({ movieId, title, type, region }: Pro
       {freeOffers.length > 0 && (
         <div className="mb-8">
           <h4 className="text-xs font-semibold text-[#555555] uppercase tracking-wider mb-4">
-            Free — {freeOffers.length} available
+            {t('free')} — {freeOffers.length} {t('available')}
           </h4>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {freeOffers.map((offer: Offer, index: number) => (
@@ -452,22 +452,22 @@ export default function StreamingProviders({ movieId, title, type, region }: Pro
         <div className="flex flex-wrap gap-2">
           {hasStreaming && (
             <div className="px-3 py-1.5 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg text-[#a1a1a1] text-xs font-medium">
-              Streaming
+              {t('streaming')}
             </div>
           )}
           {hasRent && (
             <div className="px-3 py-1.5 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg text-[#a1a1a1] text-xs font-medium">
-              Rent
+              {t('rent')}
             </div>
           )}
           {hasBuy && (
             <div className="px-3 py-1.5 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg text-[#a1a1a1] text-xs font-medium">
-              Buy
+              {t('buy')}
             </div>
           )}
           {hasFree && (
             <div className="px-3 py-1.5 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg text-[#a1a1a1] text-xs font-medium">
-              Free
+              {t('free')}
             </div>
           )}
         </div>

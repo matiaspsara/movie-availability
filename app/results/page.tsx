@@ -11,6 +11,7 @@ import ResultCard from '../../components/ResultCard';
 import MovieMeta from '../../components/MovieMeta';
 import ProductionCompanies from '../../components/ProductionCompanies';
 import MovieActions from '../../components/MovieActions';
+import { useTranslations } from '../../lib/useTranslations';
 
 type MovieDetails = {
   id: number;
@@ -31,6 +32,7 @@ type MovieDetails = {
 };
 
 function ResultsPageContent() {
+  const t = useTranslations();
   const searchParams = useSearchParams();
   const { selectedRegion } = useRegion();
   const router = useRouter();
@@ -75,8 +77,8 @@ function ResultsPageContent() {
       <div className="min-h-screen flex items-center justify-center bg-[#0f0f0f]">
         <div className="text-center">
           <div className="w-16 h-16 border-2 border-[#2a2a2a] border-t-[#a1a1a1] rounded-full animate-spin mx-auto mb-6"></div>
-          <div className="text-lg text-white font-medium">Loading...</div>
-          <div className="text-[#555555] text-sm mt-1">Finding where you can watch</div>
+          <div className="text-lg text-white font-medium">{t('loading')}</div>
+          <div className="text-[#555555] text-sm mt-1">{t('findingWhereToWatch')}</div>
         </div>
       </div>
     );
@@ -91,7 +93,7 @@ function ResultsPageContent() {
             onClick={() => router.push('/')}
             className="bg-white text-black px-6 py-2.5 rounded-xl font-medium text-sm hover:bg-[#e0e0e0] transition-colors"
           >
-            Go Back Home
+            {t('goBackHome')}
           </button>
         </div>
       </div>
@@ -139,8 +141,8 @@ function ResultsPageContent() {
             >
               <path d="m15 18-6-6 6-6"/>
             </svg>
-            <span className="font-medium hidden sm:inline">Back to Search</span>
-            <span className="font-medium sm:hidden">Back</span>
+            <span className="font-medium hidden sm:inline">{t('backToSearch')}</span>
+            <span className="font-medium sm:hidden">{t('back')}</span>
           </button>
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
@@ -200,13 +202,13 @@ function ResultsPageContent() {
                 {/* Overview */}
                 {movieDetails.overview && (
                   <div>
-                    <h3 className="text-sm font-semibold text-[#555555] uppercase tracking-wider mb-3">Overview</h3>
+                    <h3 className="text-sm font-semibold text-[#555555] uppercase tracking-wider mb-3">{t('overview')}</h3>
                     <p className="text-[#a1a1a1] leading-relaxed max-w-3xl">
                       {movieDetails.overview}
                     </p>
                   </div>
                 )}
-                <ProductionCompanies companies={movieDetails.production_companies || []} />
+                <ProductionCompanies companies={movieDetails.production_companies || []} label={t('production')} />
               </div>
             </div>
 
@@ -228,7 +230,7 @@ function ResultsPageContent() {
         {/* Footer */}
         <footer className="w-full py-6 text-center border-t border-[#1a1a1a]">
           <div className="text-[#555555] text-xs">
-            Movie data provided by The Movie Database (TMDB)
+            {t('tmdbCredit')}
           </div>
         </footer>
       </div>
@@ -240,10 +242,7 @@ export default function ResultsPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen flex items-center justify-center bg-[#0f0f0f]">
-        <div className="text-center">
-          <div className="w-16 h-16 border-2 border-[#2a2a2a] border-t-[#a1a1a1] rounded-full animate-spin mx-auto mb-6"></div>
-          <div className="text-lg text-white font-medium">Loading...</div>
-        </div>
+        <div className="w-16 h-16 border-2 border-[#2a2a2a] border-t-[#a1a1a1] rounded-full animate-spin mx-auto"></div>
       </div>
     }>
       <ResultsPageContent />

@@ -9,18 +9,19 @@ interface Company {
 
 interface ProductionCompaniesProps {
   companies: Company[];
+  label?: string;
 }
 
-const ProductionCompanies: React.FC<ProductionCompaniesProps> = ({ companies }) => {
+const ProductionCompanies: React.FC<ProductionCompaniesProps> = ({ companies, label = 'Production' }) => {
   if (!companies || companies.length === 0) return null;
   return (
     <div>
-      <h3 className="text-lg font-semibold text-white mb-3">Production</h3>
+      <h3 className="text-sm font-semibold text-[#555555] uppercase tracking-wider mb-3">{label}</h3>
       <div className="flex flex-wrap gap-3">
         {companies.slice(0, 4).map(company => (
           <div
             key={company.id}
-            className="flex items-center gap-2 bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg px-3 py-2"
+            className="flex items-center gap-2 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg px-3 py-2"
           >
             {company.logo_path ? (
               <Image
@@ -38,7 +39,7 @@ const ProductionCompanies: React.FC<ProductionCompaniesProps> = ({ companies }) 
                 </svg>
               </div>
             )}
-            <span className="text-white/80 text-sm font-medium">{company.name}</span>
+            <span className="text-[#a1a1a1] text-sm">{company.name}</span>
           </div>
         ))}
       </div>
