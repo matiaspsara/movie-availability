@@ -27,6 +27,7 @@ type MovieDetails = {
   number_of_seasons?: number;
   tagline?: string;
   production_companies?: { id: number; name: string; logo_path?: string }[];
+  videos?: { results: { key: string; site: string; type: string; official: boolean }[] };
 };
 
 function ResultsPageContent() {
@@ -100,6 +101,8 @@ function ResultsPageContent() {
   const displayTitle = movieDetails.title || movieDetails.name || '';
   const displayYear = movieDetails.release_date?.slice(0, 4) || movieDetails.first_air_date?.slice(0, 4);
   const rating = movieDetails.vote_average ? (movieDetails.vote_average / 2).toFixed(1) : 'N/A';
+  const trailerVideo = movieDetails.videos?.results.find(v => v.site === 'YouTube' && v.type === 'Trailer');
+  const trailerUrl = trailerVideo ? `https://www.youtube.com/watch?v=${trailerVideo.key}` : undefined;
 
   return (
     <div className="min-h-screen bg-[#0f0f0f] relative">
@@ -218,7 +221,7 @@ function ResultsPageContent() {
             </div>
 
             {/* Additional Actions */}
-            <MovieActions />
+            <MovieActions trailerUrl={trailerUrl} />
           </div>
         </main>
 

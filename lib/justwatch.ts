@@ -15,42 +15,44 @@ export async function getStreamingAvailability(
     };
   }
   const data = await res.json();
-  const providers = data.results?.[region]?.flatrate || [];
-  const rentProviders = data.results?.[region]?.rent || [];
-  const buyProviders = data.results?.[region]?.buy || [];
-  const freeProviders = data.results?.[region]?.free || [];
+  const regionData = data.results?.[region];
+  const regionLink: string | undefined = regionData?.link;
+  const providers = regionData?.flatrate || [];
+  const rentProviders = regionData?.rent || [];
+  const buyProviders = regionData?.buy || [];
+  const freeProviders = regionData?.free || [];
 
   const offers: StreamingOffer[] = [];
-  providers.forEach((provider: { provider_id: string; provider_name: string; link: string }) => {
+  providers.forEach((provider: { provider_id: string; provider_name: string }) => {
     offers.push({
       platform: provider.provider_id,
       platformName: provider.provider_name,
       type: 'stream',
-      url: provider.link,
+      url: regionLink,
     });
   });
-  rentProviders.forEach((provider: { provider_id: string; provider_name: string; link: string }) => {
+  rentProviders.forEach((provider: { provider_id: string; provider_name: string }) => {
     offers.push({
       platform: provider.provider_id,
       platformName: provider.provider_name,
       type: 'rent',
-      url: provider.link,
+      url: regionLink,
     });
   });
-  buyProviders.forEach((provider: { provider_id: string; provider_name: string; link: string }) => {
+  buyProviders.forEach((provider: { provider_id: string; provider_name: string }) => {
     offers.push({
       platform: provider.provider_id,
       platformName: provider.provider_name,
       type: 'buy',
-      url: provider.link,
+      url: regionLink,
     });
   });
-  freeProviders.forEach((provider: { provider_id: string; provider_name: string; link: string }) => {
+  freeProviders.forEach((provider: { provider_id: string; provider_name: string }) => {
     offers.push({
       platform: provider.provider_id,
       platformName: provider.provider_name,
       type: 'free',
-      url: provider.link,
+      url: regionLink,
     });
   });
 

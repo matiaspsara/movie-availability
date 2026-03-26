@@ -67,119 +67,105 @@ const isAndroid = (): boolean => {
 };
 
 // Get streaming service URLs for different platforms
-const getStreamingUrls = (platformName: string, contentUrl?: string) => {
-  const fallbackWeb = contentUrl || '#';
-  
+const getStreamingUrls = (platformName: string, title: string, contentUrl?: string) => {
+  const q = encodeURIComponent(title);
+
   switch (platformName.toLowerCase()) {
     case 'netflix':
       return {
-        web: contentUrl || 'https://www.netflix.com',
+        web: contentUrl || `https://www.netflix.com/search?q=${q}`,
         ios: 'nflx://',
-        android: contentUrl || 'https://www.netflix.com'
+        android: contentUrl || `https://www.netflix.com/search?q=${q}`,
       };
-    
     case 'prime video':
     case 'amazon prime':
       return {
-        web: contentUrl || 'https://www.amazon.com/Prime-Video',
+        web: contentUrl || `https://www.amazon.com/s?k=${q}&i=instant-video`,
         ios: 'aiv://',
-        android: 'intent://www.amazon.com/Prime-Video#Intent;package=com.amazon.avod.thirdpartyclient;end;'
+        android: `intent://www.amazon.com/s?k=${q}&i=instant-video#Intent;package=com.amazon.avod.thirdpartyclient;end;`,
       };
-    
     case 'hulu':
       return {
-        web: contentUrl || 'https://www.hulu.com',
+        web: contentUrl || `https://www.hulu.com/search?q=${q}`,
         ios: 'hulu://',
-        android: 'intent://www.hulu.com#Intent;package=com.hulu.plus;end;'
+        android: `intent://www.hulu.com/search?q=${q}#Intent;package=com.hulu.plus;end;`,
       };
-    
     case 'hbo max':
       return {
-        web: contentUrl || 'https://www.max.com',
+        web: contentUrl || `https://play.max.com/search?q=${q}`,
         ios: 'hbomax://',
-        android: 'intent://www.max.com#Intent;package=com.hbo.hbonow;end;'
+        android: `intent://play.max.com/search?q=${q}#Intent;package=com.hbo.hbonow;end;`,
       };
-    
     case 'disney+':
       return {
-        web: contentUrl || 'https://www.disneyplus.com',
+        web: contentUrl || `https://www.disneyplus.com/search/${q}`,
         ios: 'disneyplus://',
-        android: 'intent://www.disneyplus.com#Intent;package=com.disney.disneyplus;end;'
+        android: `intent://www.disneyplus.com/search/${q}#Intent;package=com.disney.disneyplus;end;`,
       };
-    
     case 'apple tv+':
       return {
-        web: contentUrl || 'https://tv.apple.com',
+        web: contentUrl || `https://tv.apple.com/search?term=${q}`,
         ios: 'com.apple.tv://',
-        android: fallbackWeb
+        android: contentUrl || `https://tv.apple.com/search?term=${q}`,
       };
-    
     case 'paramount+':
       return {
-        web: contentUrl || 'https://www.paramountplus.com',
+        web: contentUrl || `https://www.paramountplus.com/search/${q}/`,
         ios: 'cbsaa://',
-        android: 'intent://www.paramountplus.com#Intent;package=com.cbs.app;end;'
+        android: `intent://www.paramountplus.com/search/${q}/#Intent;package=com.cbs.app;end;`,
       };
-    
     case 'peacock':
       return {
-        web: contentUrl || 'https://www.peacocktv.com',
+        web: contentUrl || `https://www.peacocktv.com/watch/asset/search?q=${q}`,
         ios: 'peacocktv://',
-        android: 'intent://www.peacocktv.com#Intent;package=com.peacocktv.peacockandroid;end;'
+        android: `intent://www.peacocktv.com/watch/asset/search?q=${q}#Intent;package=com.peacocktv.peacockandroid;end;`,
       };
-    
     case 'youtube':
       return {
-        web: contentUrl || 'https://www.youtube.com',
+        web: contentUrl || `https://www.youtube.com/results?search_query=${q}`,
         ios: 'youtube://',
-        android: 'intent://www.youtube.com#Intent;package=com.google.android.youtube;end;'
+        android: `intent://www.youtube.com/results?search_query=${q}#Intent;package=com.google.android.youtube;end;`,
       };
-    
     case 'crunchyroll':
       return {
-        web: contentUrl || 'https://www.crunchyroll.com',
+        web: contentUrl || `https://www.crunchyroll.com/search?q=${q}`,
         ios: 'crunchyroll://',
-        android: 'intent://www.crunchyroll.com#Intent;package=com.crunchyroll.crunchyroid;end;'
+        android: `intent://www.crunchyroll.com/search?q=${q}#Intent;package=com.crunchyroll.crunchyroid;end;`,
       };
-
     case 'tubi':
       return {
-        web: contentUrl || 'https://tubitv.com',
+        web: contentUrl || `https://tubitv.com/search/${q}`,
         ios: 'tubitv://',
-        android: 'intent://tubitv.com#Intent;package=com.tubitv;end;'
+        android: `intent://tubitv.com/search/${q}#Intent;package=com.tubitv;end;`,
       };
-    
     case 'pluto tv':
       return {
-        web: contentUrl || 'https://pluto.tv',
+        web: contentUrl || `https://pluto.tv/search#${q}`,
         ios: 'plutotv://',
-        android: 'intent://pluto.tv#Intent;package=tv.pluto.android;end;'
+        android: `intent://pluto.tv/search#${q}#Intent;package=tv.pluto.android;end;`,
       };
-
     case 'vudu':
       return {
-        web: contentUrl || 'https://www.vudu.com',
+        web: contentUrl || `https://www.vudu.com/content/browse/index/search/${q}`,
         ios: 'vudu://',
-        android: 'intent://www.vudu.com#Intent;package=air.com.vudu.air.DownloaderTablet;end;'
+        android: `intent://www.vudu.com/content/browse/index/search/${q}#Intent;package=air.com.vudu.air.DownloaderTablet;end;`,
       };
-
     case 'mubi':
       return {
-        web: contentUrl || 'https://mubi.com',
+        web: contentUrl || `https://mubi.com/search/${q}`,
         ios: 'mubi://',
-        android: 'intent://mubi.com#Intent;package=com.mubi;end;'
+        android: `intent://mubi.com/search/${q}#Intent;package=com.mubi;end;`,
       };
-
     default:
       return {
-        web: fallbackWeb
+        web: contentUrl || `#`,
       };
   }
 };
 
 // Smart function to open streaming service
-const openStreamingService = (platformName: string, contentUrl?: string): void => {
-  const urls = getStreamingUrls(platformName, contentUrl);
+const openStreamingService = (platformName: string, title: string, contentUrl?: string): void => {
+  const urls = getStreamingUrls(platformName, title, contentUrl);
   
   if (!isMobile()) {
     // Desktop: Always open web URL
@@ -275,7 +261,7 @@ export default function StreamingProviders({ movieId, title, type, region }: Pro
       await new Promise(resolve => setTimeout(resolve, 150));
       
       // Use the smart platform opening function
-      openStreamingService(offer.platformName, offer.url);
+      openStreamingService(offer.platformName, title, offer.url);
       
     } catch (error) {
       console.error('Error opening streaming service:', error);
