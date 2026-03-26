@@ -1,6 +1,8 @@
 {
   "appName": "Dónde ver",
-  "searchPlaceholder": "Buscar una película o serie...",
+  "homeHeading": "Dónde Ver",
+  "homeSubtitle": "Buscá cualquier película o serie para saber dónde está disponible.",
+  "searchPlaceholder": "Buscar películas, series...",
   "regionLabel": "Región",
   "languageLabel": "Idioma",
   "providersLabel": "Disponible en",

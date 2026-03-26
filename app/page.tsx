@@ -3,8 +3,10 @@
 import { useState, useEffect } from 'react';
 import SearchBar from '../components/SearchBar';
 import RegionSelector from '../components/RegionSelector';
+import { useTranslations } from '../lib/useTranslations';
 
 export default function Homepage() {
+	const t = useTranslations();
 	const [mounted, setMounted] = useState(false);
 
 	useEffect(() => {
@@ -30,10 +32,10 @@ export default function Homepage() {
 			<main className="flex-1 flex flex-col items-center justify-center px-6 pb-24">
 				<div className="w-full max-w-2xl mx-auto text-center">
 					<h2 className="text-4xl md:text-5xl font-bold text-white mb-3 tracking-tight">
-						Where to Watch
+						{t('homeHeading')}
 					</h2>
 					<p className="text-[#a1a1a1] text-lg mb-10">
-						Search any movie or TV show to find where it&apos;s streaming.
+						{t('homeSubtitle')}
 					</p>
 					<SearchBar />
 				</div>

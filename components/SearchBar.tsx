@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useRegion } from './RegionContext';
+import { useTranslations } from '../lib/useTranslations';
 
 type SearchResult = {
   id: number;
@@ -18,6 +19,7 @@ export default function SearchBar() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { selectedRegion } = useRegion();
+  const t = useTranslations();
   const router = useRouter();
 
   useEffect(() => {
@@ -86,7 +88,7 @@ export default function SearchBar() {
             </div>
             <input
               type="text"
-              placeholder="Search for movies, TV shows..."
+              placeholder={t('searchPlaceholder')}
               className="w-full pl-12 pr-5 py-4 sm:py-5 bg-transparent text-white placeholder-[#555555] text-base sm:text-lg focus:outline-none"
               value={query}
               onChange={e => setQuery(e.target.value)}
