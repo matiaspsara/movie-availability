@@ -6,19 +6,20 @@ import { tmdbSearch } from '../../lib/tmdb';
 const cache = new NodeCache({ stdTTL: 3600 }); // 1 hour TTL
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { q, region } = req.query;
+  const { q, region, language } = req.query;
   if (!q || typeof q !== 'string') {
     return res.status(400).json({ error: 'Missing query parameter' });
   }
 
-  const cacheKey = `autocomplete:${region || 'all'}:${q.toLowerCase()}`;
+  const lang = typeof language === 'string' ? language : 'en-US';
+  const cacheKey = `autocomplete:${region || 'all'}:${lang}:${q.toLowerCase()}`;
   const cached = cache.get(cacheKey);
   if (cached) return res.status(200).json(cached);
 
   try {
     const [movies, tv] = await Promise.all([
-      tmdbSearch(q, 'movie', region as string),
-      tmdbSearch(q, 'tv', region as string),
+      tmdbSearch(q, 'movie', region as string, lang),
+      tmdbSearch(q, 'tv', region as string, lang),
     ]);
 
     // Combine and normalize results

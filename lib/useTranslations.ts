@@ -1,4 +1,4 @@
-import { useLanguage } from "../components/LanguageContext";
+import { useRegion } from "../components/RegionContext";
 import en from "../messages/en.json";
 import es from "../messages/es.json";
 
@@ -8,8 +8,8 @@ const translations: Record<string, Record<string, string>> = {
 };
 
 export function useTranslations() {
-  const { language } = useLanguage();
+  const { selectedRegion } = useRegion();
   return (key: string) => {
-    return translations[language]?.[key] || key;
+    return translations[selectedRegion.language]?.[key] || key;
   };
 }

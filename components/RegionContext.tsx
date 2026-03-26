@@ -4,12 +4,14 @@ import { createContext, useContext, useState, ReactNode } from 'react';
 type Region = {
   code: string;
   flag: string;
+  language: 'en' | 'es';
+  tmdbLocale: string;
 };
 
 const regions = [
-  { code: 'US', flag: '🇺🇸' },
-  { code: 'AR', flag: '🇦🇷' },
-  { code: 'UK', flag: '🇬🇧' },
+  { code: 'US', flag: '🇺🇸', language: 'en' as const, tmdbLocale: 'en-US' },
+  { code: 'AR', flag: '🇦🇷', language: 'es' as const, tmdbLocale: 'es-AR' },
+  { code: 'UK', flag: '🇬🇧', language: 'en' as const, tmdbLocale: 'en-GB' },
 ];
 
 type RegionContextType = {

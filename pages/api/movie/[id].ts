@@ -4,7 +4,7 @@ const API_KEY = process.env.TMDB_API_KEY;
 const BASE_URL = 'https://api.themoviedb.org/3';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { id, type } = req.query;
+  const { id, type, language } = req.query;
 
   if (!id || typeof id !== 'string') {
     return res.status(400).json({ error: 'Missing movie ID' });
@@ -14,7 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const response = await fetch(
-      `${BASE_URL}/${contentType}/${id}?api_key=${API_KEY}&language=en-US&append_to_response=credits,videos,images`
+      `${BASE_URL}/${contentType}/${id}?api_key=${API_KEY}&language=${typeof language === 'string' ? language : 'en-US'}&append_to_response=credits,videos,images`
     );
 
     if (!response.ok) {

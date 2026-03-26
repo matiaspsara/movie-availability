@@ -49,7 +49,7 @@ function ResultsPageContent() {
     }
     const fetchMovieDetails = async () => {
       try {
-        const response = await fetch(`/api/movie/${movieId}?type=${type}`);
+        const response = await fetch(`/api/movie/${movieId}?type=${type}&language=${selectedRegion.tmdbLocale}`);
         if (!response.ok) {
           throw new Error('Failed to fetch movie details');
         }
@@ -63,7 +63,7 @@ function ResultsPageContent() {
       }
     };
     fetchMovieDetails();
-  }, [movieId, type]);
+  }, [movieId, type, selectedRegion.tmdbLocale]);
 
   useEffect(() => {
     setRegion(selectedRegion.code);

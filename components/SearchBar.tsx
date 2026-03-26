@@ -25,7 +25,7 @@ export default function SearchBar() {
       if (query.trim()) {
         setIsLoading(true);
         try {
-          const response = await fetch(`/api/autocomplete?q=${encodeURIComponent(query)}&region=${selectedRegion.code}`);
+          const response = await fetch(`/api/autocomplete?q=${encodeURIComponent(query)}&region=${selectedRegion.code}&language=${selectedRegion.tmdbLocale}`);
           const data = await response.json();
           setResults(data);
           setShowDropdown(true);
@@ -42,7 +42,7 @@ export default function SearchBar() {
     }, 300);
 
     return () => clearTimeout(timeout);
-  }, [query, selectedRegion.code]);
+  }, [query, selectedRegion.code, selectedRegion.tmdbLocale]);
 
   const handleResultClick = (result: SearchResult) => {
     setQuery(result.title);
