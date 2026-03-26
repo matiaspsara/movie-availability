@@ -4,7 +4,7 @@ import { createContext, useContext, useState, ReactNode } from 'react';
 type Region = {
   code: string;
   flag: string;
-  language: 'en' | 'es';
+  language: 'en' | 'es' | 'it' | 'de';
   tmdbLocale: string;
 };
 
@@ -12,6 +12,8 @@ const regions = [
   { code: 'US', flag: '🇺🇸', language: 'en' as const, tmdbLocale: 'en-US' },
   { code: 'AR', flag: '🇦🇷', language: 'es' as const, tmdbLocale: 'es-AR' },
   { code: 'UK', flag: '🇬🇧', language: 'en' as const, tmdbLocale: 'en-GB' },
+  { code: 'IT', flag: '🇮🇹', language: 'it' as const, tmdbLocale: 'it-IT' },
+  { code: 'DE', flag: '🇩🇪', language: 'de' as const, tmdbLocale: 'de-DE' },
 ];
 
 type RegionContextType = {

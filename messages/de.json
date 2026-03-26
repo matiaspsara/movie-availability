@@ -1,0 +1,13 @@
+{
+  "appName": "Wo Schauen",
+  "homeHeading": "Wo Schauen",
+  "homeSubtitle": "Suche nach einem Film oder einer Serie, um herauszufinden, wo er verfügbar ist.",
+  "searchPlaceholder": "Filme, Serien suchen...",
+  "regionLabel": "Region",
+  "languageLabel": "Sprache",
+  "providersLabel": "Verfügbar auf",
+  "noResults": "Keine Ergebnisse gefunden.",
+  "selectLanguage": "Sprache auswählen",
+  "english": "Englisch",
+  "spanish": "Spanisch"
+}

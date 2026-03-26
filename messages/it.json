@@ -1,0 +1,13 @@
+{
+  "appName": "Dove Guardare",
+  "homeHeading": "Dove Guardare",
+  "homeSubtitle": "Cerca qualsiasi film o serie TV per scoprire dove è disponibile in streaming.",
+  "searchPlaceholder": "Cerca film, serie TV...",
+  "regionLabel": "Regione",
+  "languageLabel": "Lingua",
+  "providersLabel": "Disponibile su",
+  "noResults": "Nessun risultato trovato.",
+  "selectLanguage": "Seleziona lingua",
+  "english": "Inglese",
+  "spanish": "Spagnolo"
+}
