@@ -11,6 +11,7 @@ type SearchResult = {
   year: string;
   type: string;
   poster: string | null;
+  providers?: { name: string; logo: string }[];
 };
 
 export default function SearchBar() {
@@ -130,11 +131,26 @@ export default function SearchBar() {
               </div>
               <div className="flex-1 min-w-0">
                 <h4 className="text-white font-medium truncate">{result.title}</h4>
-                <div className="flex items-center gap-2 mt-0.5">
-                  <span className="text-[#555555] text-sm">{result.year}</span>
+                <div className="flex items-center gap-2 mt-1 flex-wrap">
+                  <span className="text-[#555555] text-xs">{result.year}</span>
                   <span className="px-2 py-0.5 bg-[#222222] rounded text-[#a1a1a1] text-xs border border-[#2a2a2a]">
                     {result.type.toUpperCase()}
                   </span>
+                  {result.providers && result.providers.length > 0 && (
+                    <div className="flex items-center gap-1">
+                      {result.providers.map((p) => (
+                        <Image
+                          key={p.name}
+                          src={p.logo}
+                          alt={p.name}
+                          width={18}
+                          height={18}
+                          className="rounded-sm opacity-80"
+                          title={p.name}
+                        />
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="text-[#3a3a3a] flex-shrink-0">

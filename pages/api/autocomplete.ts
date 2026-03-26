@@ -4,6 +4,8 @@ import NodeCache from 'node-cache';
 import { tmdbSearch } from '../../lib/tmdb';
 
 const cache = new NodeCache({ stdTTL: 3600 }); // 1 hour TTL
+const API_KEY = process.env.TMDB_API_KEY;
+const BASE_URL = 'https://api.themoviedb.org/3';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { q, region, language } = req.query;
@@ -12,14 +14,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   const lang = typeof language === 'string' ? language : 'en-US';
-  const cacheKey = `autocomplete:${region || 'all'}:${lang}:${q.toLowerCase()}`;
+  const regionCode = typeof region === 'string' ? region : 'US';
+  const cacheKey = `autocomplete:${regionCode}:${lang}:${q.toLowerCase()}`;
   const cached = cache.get(cacheKey);
   if (cached) return res.status(200).json(cached);
 
   try {
     const [movies, tv] = await Promise.all([
-      tmdbSearch(q, 'movie', region as string, lang),
-      tmdbSearch(q, 'tv', region as string, lang),
+      tmdbSearch(q, 'movie', regionCode, lang),
+      tmdbSearch(q, 'tv', regionCode, lang),
     ]);
 
     // Combine and normalize results
@@ -46,22 +49,47 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       })),
     ];
 
-    // Sort by relevance: exact match (case-insensitive), then popularity
+    // Sort by relevance: exact match first, then popularity
     const lowerQ = q.trim().toLowerCase();
     combined.sort((a, b) => {
-      // Exact match first
       const aExact = a.title.trim().toLowerCase() === lowerQ ? 1 : 0;
       const bExact = b.title.trim().toLowerCase() === lowerQ ? 1 : 0;
       if (aExact !== bExact) return bExact - aExact;
-      // Higher popularity first
       return b.popularity - a.popularity;
     });
 
-    // Only include results with a poster image
-    const results = combined
+    const top = combined
       .filter(item => !!item.poster)
       .slice(0, 10)
       .map(({ popularity, ...rest }) => rest);
+
+    // Fetch streaming providers for each result in parallel
+    const withProviders = await Promise.allSettled(
+      top.map(async (item) => {
+        try {
+          const provRes = await fetch(
+            `${BASE_URL}/${item.type}/${item.id}/watch/providers?api_key=${API_KEY}`
+          );
+          if (!provRes.ok) return { ...item, providers: [] };
+          const provData = await provRes.json();
+          const flatrate = provData.results?.[regionCode]?.flatrate || [];
+          return {
+            ...item,
+            providers: flatrate.slice(0, 4).map((p: { provider_name: string; logo_path: string }) => ({
+              name: p.provider_name,
+              logo: `https://image.tmdb.org/t/p/w45${p.logo_path}`,
+            })),
+          };
+        } catch {
+          return { ...item, providers: [] };
+        }
+      })
+    );
+
+    const results = withProviders.map((r, i) =>
+      r.status === 'fulfilled' ? r.value : { ...top[i], providers: [] }
+    );
+
     cache.set(cacheKey, results);
     res.status(200).json(results);
   } catch (err) {
